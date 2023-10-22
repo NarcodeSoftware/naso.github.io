@@ -1,0 +1,3714 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+	 <title>G A M B I T</title>
+	 <meta charset="UTF-8"/>
+	 <meta name="viewport" content="width=device-width, initial-scale=1">
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.8/push.min.js" integrity="sha512-eiqtDDb4GUVCSqOSOTz/s/eiU4B31GrdSb17aPAA4Lv/Cjc8o+hnDvuNkgXhSI5yHuDvYkuojMaQmrB5JB31XQ==" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/push.js/1.0.8/serviceWorker.min.js" integrity="sha512-gZN7SatPzB7LiGjOd4Sree/ecjktoLPgWt22wfApKrzuCpS9KsK7uKEDB+AAGY96NHCW1sAEm1JdaHDDP4MsIQ==" crossorigin="anonymous"></script>
+ 
+<script src="https://kit.fontawesome.com/7c5b073ecd.js"></script>  
+<link rel="shortcut icon" type="image/jpg" href="https://i.imgur.com/2WAoE74.png"/>
+ </head>
+	 <body>
+
+<style>
+
+.headerStyle{
+height:150px;
+border:2px solid black;
+border-radius:5px 5px 0px 0px;
+}
+
+.altHeaderStyle{
+height:50px;
+background:white;
+}
+
+.bodyStyle{
+height:96vw;
+border:0px solid black;
+border-radius:0px;
+background:gray;
+}
+
+.footerStyle{
+height:99px;
+border:2px solid black;
+border-radius:0px 0px 5px 5px;
+}
+
+.newsStyle{
+margin-top:15px;
+}
+
+.rowStyle{
+height:100%;
+border:0px black;
+border-style:solid;
+border-radius:50px;
+background:darkgray;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.ballSpan{
+display:none;
+color:white;
+}
+
+.determiner{
+height:10%;
+border-width:5px;
+border-color:black;
+border-style:solid;
+border-radius:10px;
+background:darkgray;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.bsDate{
+display:none
+}
+
+.badge{
+background:red
+}
+
+.okStyle{
+border-radius:25px;
+display:flex; 
+align-items:center;
+justify-content:center;
+border:0px solid black;
+height:95px;
+}
+
+.leftOptionStyle{
+border:1px solid black;
+height:95px;
+}
+
+.rightOptionStyle{
+border:1px solid black;
+height:95px;
+}
+
+.logoStyle{
+border-radius:0px;
+display:flex; 
+align-items:center;
+justify-content:center;
+border:0px solid black;
+height:100px;
+font-size:45px;
+color:skyblue;
+font-family:cursive;
+font-style:italic;
+}
+
+.optionsDownStyle{
+display:flex;
+align-items:center;
+justify-content:center;
+height:33px;
+}
+
+.optionsUpStyle{
+display:flex;
+align-items:center;
+justify-content:center;
+height:50px;
+font-size:22px;
+}
+
+.optionsUpMjStyle{
+display:flex;
+align-items:center;
+height:50px;
+font-size:22px;
+}
+
+.vcenter{
+display:flex;
+align-items:center;
+justify-content:center;
+height:50px;
+}
+
+.pcenter{
+display:flex;
+align-items:center;
+}
+
+.profilevcenter{
+display:flex;
+align-items:center;
+justify-content:center;
+height:149px;
+font-size:90px;
+}
+
+.okBtn{
+height:35px;
+font-size:14px;
+width:25vw;
+}
+
+.okBtn-ek{
+animation:anime .3s
+}
+
+@keyframes anime {
+	 0%{height:35px;font-size:14px;width:25vw;}
+	 100%{height:42px;font-size:16px;width:27vw;}	 
+ }
+ 
+ .logo{
+ opacity:0;
+ }
+ 
+ .logo-ek{
+ animation:logoAnime 2s
+ }
+ 
+ @keyframes logoAnime {
+	 0%{opacity:0;}
+	 100%{opacity:1;}	 
+ }
+ 
+
+.puanaCevirStyle{
+display:none;
+position:absolute;
+margin-top:55px;
+
+}
+ 
+
+</style>	 
+
+
+<script>
+
+var clickSound = new Audio("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1506195/keyboard-key.mp3")
+clickSound.volume=1.0
+	 	 	 
+clickSoundGet = function(){
+clickSound.play()
+}
+
+
+
+function grafikYukle(){
+var sd = []
+var shn = []
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var kullaniciKodu = localStorage.getItem('userCode')
+var rakipAdi = $('#gameOpponentSpace').html()
+var oyunKodu = $('#keySpace').html()
+var query = firebase.database().ref("oyunlar/"+oyunKodu); 
+
+ query.on('value', function (snapshot){
+ var dataP = snapshot.val()
+ var rkpAdi = $('#nameSpace').html()
+ 
+ if((dataP.from == kullaniciAdi && dataP.with == rkpAdi) || (dataP.from == rkpAdi && dataP.with == kullaniciAdi)){
+ 
+ $('#winner').html('')
+ var ts = 0
+ 
+ 		$('.ballSpan').css('display','none')
+		$('.rowStyle').css('background','darkgray')
+		for(h=0;h<144;h++){	
+ 		document.getElementsByClassName('ballSpan')[h].innerHTML = ''
+ 		document.getElementsByClassName('determiner')[h].style.borderColor= "darkgray"
+ 		 }
+ 	
+ snapshot.forEach(function (childSnapshot){  
+   var data = childSnapshot.val()
+    var rkpAdi = $('#nameSpace').html()
+ 
+ 
+   var gemData = data.hamle
+   var bOrS = gemData.charAt(gemData.length-1)
+   var lcl = gemData.slice(0,gemData.indexOf('-'))
+   if(bOrS=='B'){
+   document.getElementsByClassName('rowStyle')[lcl].style.background = 'black'
+   ts = ts + 1
+   document.getElementsByClassName('ballSpan')[lcl].innerHTML = ts
+   document.getElementsByClassName('bsDate')[lcl].innerHTML = data.tarih
+   document.getElementsByClassName('ballSpan')[lcl].style.display= "none"
+   sd.push("B")
+   shn.push(lcl)
+   }else if(bOrS=='W'){
+   document.getElementsByClassName('rowStyle')[lcl].style.background = 'orange'
+   ts = ts + 1
+   document.getElementsByClassName('ballSpan')[lcl].innerHTML = ts
+   document.getElementsByClassName('bsDate')[lcl].innerHTML = data.tarih
+   document.getElementsByClassName('ballSpan')[lcl].style.display= "none"
+   sd.push("W")
+   shn.push(lcl)
+   }
+   
+   
+});
+}
+});
+
+var bosluk = 0
+for(d=0;d<=143;d++){
+	if(document.getElementsByClassName('rowStyle')[d].style.background=="darkgray"){
+			bosluk = bosluk + 1
+	}
+	
+}
+if(bosluk==144){
+sd.splice(0,sd.length)
+}
+ 
+query.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = snapshot.val()
+var sonSd = sd[sd.length-1]
+if(sonSd=="B" && document.getElementById('gameOwnerSpace').innerHTML==kullaniciAdi){
+$('#buttonBlack').hide()
+$('#buttonWhite').hide()
+}else if(sonSd=="W" && document.getElementById('gameOwnerSpace').innerHTML==kullaniciAdi){
+$('#buttonBlack').show()
+$('#buttonWhite').hide()
+}else if(sonSd=="B" && document.getElementById('gameOwnerSpace').innerHTML!=kullaniciAdi){
+$('#buttonBlack').hide()
+$('#buttonWhite').show()
+}else if(sonSd=="W" && document.getElementById('gameOwnerSpace').innerHTML!=kullaniciAdi){
+$('#buttonBlack').hide()
+$('#buttonWhite').hide()
+}else if(sonSd==undefined && document.getElementById('gameOwnerSpace').innerHTML==kullaniciAdi){
+$('#buttonBlack').show()
+$('#buttonWhite').hide()
+}else if(sonSd==undefined && document.getElementById('gameOwnerSpace').innerHTML!=kullaniciAdi){
+$('#buttonBlack').hide()
+$('#buttonWhite').hide()
+}
+
+var sonShn = shn[shn.length-1]
+document.getElementsByClassName('ballSpan')[sonShn].style.display= "block"
+$("#buttonNewGame").hide()
+
+
+
+
+for(d=0;d<=143;d++){
+
+if(document.getElementsByClassName('rowStyle')[d].style.background=="orange"){
+ 		 		document.getElementsByClassName('determiner')[d].style.borderColor="orange"
+ 		 		document.getElementsByClassName('determiner')[d].style.background="orange"
+ 		 }
+ 		 
+ 		 if(document.getElementsByClassName('rowStyle')[d].style.background=="black"){
+ 		 		document.getElementsByClassName('determiner')[d].style.borderColor="black"
+ 		 		document.getElementsByClassName('determiner')[d].style.background="black"
+ 		 }
+ 		 
+ 		 if(document.getElementsByClassName('rowStyle')[d].style.background=="darkgray"){
+ 		 		document.getElementsByClassName('determiner')[d].style.borderColor="darkgray"
+ 		 }
+ 		 
+ 		 if(document.getElementsByClassName('rowStyle')[d].style.background=="green"){
+ 		 		document.getElementsByClassName('determiner')[d].style.display="none"
+ 		 }
+ 		 
+ 		 if(document.getElementsByClassName('ballSpan')[d].style.display=="block"){
+ 		 		document.getElementsByClassName('determiner')[d].style.display="none"
+ 		 }
+
+}
+
+
+if($('#gameOwnerSpace').html()==kullaniciAdi){
+$('#benPuan').html(data.skorFrom)
+$('#rakipPuan').html(data.skorWith)		
+}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+$('#benPuan').html(data.skorWith)
+$('#rakipPuan').html(data.skorFrom)		
+}
+
+});
+controlVertical()
+controlHorizontal()
+controlRightToLeft()
+controlLeftToRight()
+
+var queryY=firebase.database().ref('kullanicilar/' + kullaniciKodu)
+queryY.on('value',function(snapshot){
+var dataY=snapshot.val()
+localStorage.setItem('bitenOyunum',dataY.bitenOyun)
+});
+
+setTimeout(function(){
+var rkpKey = $('#opponentCodeSpace').html()
+var queryZ=firebase.database().ref('kullanicilar/' + rkpKey)
+queryZ.on('value',function(snapshot){
+var dataZ=snapshot.val()
+localStorage.setItem('rakipBitenOyun',dataZ.bitenOyun)
+});
+},450)
+
+
+
+
+clickSoundGet();
+
+
+
+if($('#buttonNewGame').css('display')=='block'){
+$("#gameOverSpace").html('Game Over!')
+for(f=0;f<=143;f++){
+document.getElementsByClassName('determiner')[f].style.display="none"
+}
+}				
+});
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}			
+}
+
+
+function newGame2(){
+$("#gameOverSpace").html('')
+oyunKodu=$('#keySpace').html()
+var query = firebase.database().ref("oyunlar/"+oyunKodu); 
+var isim = document.getElementById("nameSpace").innerHTML
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var alan = $('#messagesOpponentName').html()
+var aliciKisi = alan.slice(1,alan.length)
+if($('#gameOwnerSpace').html()==kullaniciAdi){
+var skorfrom = $('#benPuan').html()
+var skorwith = $('#rakipPuan').html()
+}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+var skorfrom = $('#rakipPuan').html()
+var skorwith = $('#benPuan').html()
+}
+
+	firebase.database().ref('oyunlar/'+oyunKodu).set({
+    from:$('#gameOwnerSpace').html(),
+    with:$('#gameOpponentSpace').html(),
+    oyunkodu:oyunKodu,
+    skorFrom:skorfrom,
+    skorWith:skorwith,
+    oyun: "yeni oyun",
+    mesajlar:""
+  });
+	firebase.database().ref('oyunlar/' + oyunKodu + '/mesajlar').update({ 
+   oyuncu1:kullaniciAdi,
+   oyuncu2:aliciKisi
+	});
+	
+
+grafikYukle();
+
+}
+
+
+
+msd = 0
+
+function oyunYukle(ul){
+$('#myRanking').html('')
+$('#opponentRanking').html('')
+$('#state').html('giris yapildi')
+$('#winner').html('')
+$("#gameOverSpace").html('')
+$("#buttonNewGame").hide()
+$('#gamesSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#oyunSayfasi').show()
+$('#buttonBlack').hide()
+$('#buttonWhite').hide()
+$('#opponentCodeSpace').html("")
+var cw = $('.rowStyle').css('width')
+$('.cw').css('height',cw)
+for(h=0;h<144;h++){	
+ 		document.getElementsByClassName('rowStyle')[h].style.background = 'darkgray'
+ 		document.getElementsByClassName('ballSpan')[h].innerHTML = '' 		
+ 		document.getElementsByClassName('determiner')[h].style.borderColor= "darkgray" 	
+ 		document.getElementsByClassName('determiner')[h].style.background= "darkgray" 		 	 
+ 	}
+var oyunMesaji=ul.innerHTML
+var mesajBasi = oyunMesaji.indexOf('@@')
+var mesajSonu = oyunMesaji.indexOf('##')
+var gKey = oyunMesaji.slice(mesajBasi+2,mesajSonu)
+$('#keySpace').html(gKey)
+var ismSonu = oyunMesaji.indexOf('@@')
+var rakipİsmi=oyunMesaji.slice(27,ismSonu)
+$('#nameSpace').html(rakipİsmi)
+
+var oyuncular = []
+var oyuncuKeys = []
+var query = firebase.database().ref("kullanicilar/"); 
+ query.on('value', function (snapshot){ 
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val();
+ oyuncular.push(data.user)
+ oyuncuKeys.push(data.kullaniciKodu)
+});
+});
+setTimeout(function(){
+var rakipNo = oyuncular.indexOf(rakipİsmi)
+$('#opponentCodeSpace').html(oyuncuKeys[rakipNo])
+
+},400)
+
+
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var query = firebase.database().ref("oyunlar/"+gKey); 
+ query.on('value', function (snapshot){  
+ snapshot.forEach(function (childSnapshot){  
+ var data = snapshot.val();
+ var rkpAdi = $('#nameSpace').html()
+ localStorage.setItem('telRakip',rkpAdi) 
+  
+ if((data.from == kullaniciAdi && data.with == rkpAdi) || (data.from == rkpAdi && data.with == kullaniciAdi)){
+ 
+ $('#kulid').html('@'+rakipİsmi)
+ $('#rakid').html('@'+kullaniciAdi)
+ $('#gameOwnerSpace').html(data.from)
+ $('#gameOpponentSpace').html(data.with)
+ 
+if($('#gameOwnerSpace').html()==kullaniciAdi){
+$('#benPuan').html(data.skorFrom)
+$('#rakipPuan').html(data.skorWith)		
+}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+$('#benPuan').html(data.skorWith)
+$('#rakipPuan').html(data.skorFrom)		
+}
+
+}
+
+ });
+ });
+ 
+$('#sheet').html('oyun alani sayfasi')	
+
+var veri=[]
+var veriKullaniciKodu=[]
+var veriPuantaj=[]
+var veriPuan = []
+var veriUser=[]
+var querQ = firebase.database().ref("kullanicilar"); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+veri.push(data.kullaniciKodu)		
+veri.push(data.toplamPuan)
+veri.push(data.user)
+});
+});
+
+setTimeout(function(){
+
+for(i=0;i<(veri.length)/3;i++){
+	veriKullaniciKodu.push(veri[3*i])
+	veriPuantaj.push(veri[3*i+1])
+	veriPuan.push(veri[3*i+1])
+	veriUser.push(veri[3*i+2])
+	}
+var exa = []
+var siraliNameList=[]
+for(i=0;i<(veri.length)/3;i++){
+exa[i] = [veriKullaniciKodu[i],veriPuantaj[i],veriUser[i]]
+}
+var sfx = (veri.length)/3
+for(i=0;i<sfx;i++){
+veriPuantaj.sort(function(a,b){
+return b-a;
+});
+var bigIndex = veriPuan.indexOf(veriPuantaj[0])
+siraliNameList.push(exa[bigIndex][2])
+exa.splice(bigIndex,1)
+veriPuan.splice(bigIndex,1)
+veriPuantaj.shift()
+}
+
+var userRanking = siraliNameList.indexOf(kullaniciAdi)+1
+var opponentRanking = siraliNameList.indexOf(rakipİsmi)+1
+$('#myRanking').html(userRanking)
+$('#opponentRanking').html(opponentRanking)
+
+$('.ballSpan').css('display','none')
+grafikYukle();
+
+
+
+},300)
+
+
+
+
+
+}
+
+
+
+
+
+function gameErase(op){
+var erMesaji=op.innerHTML
+var erBasi = erMesaji.indexOf('**')
+var erSonu = erMesaji.indexOf('##')
+var eKey = erMesaji.slice(erBasi+2,erSonu)
+
+var oyunBasi = erMesaji.indexOf('__')
+var oyunSonu = erMesaji.indexOf('$$')
+var oyunKey = erMesaji.slice(oyunBasi+2,oyunSonu)
+
+var kisiBasi = erMesaji.indexOf('#p@')
+var kisiSonu = erMesaji.indexOf('@p#')
+var person = erMesaji.slice(kisiBasi+3,kisiSonu)
+
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+
+var tarih = new Date()
+ var saat = Number(tarih.getHours())
+ var dakika = parseInt(tarih.getMinutes())
+ 		if(dakika<10){
+ 		var dakika = "0" + dakika
+		 }
+		 if(saat<10){
+ 		var saat = "0" + saat
+		 }
+ var gun = parseInt(tarih.getDate())
+ var ay = parseInt(tarih.getMonth())+1
+ var yil = parseInt(tarih.getFullYear())
+ 		if(gun<10){
+ 		var gun = "0" + gun
+		 }
+		 if(ay<10){
+ 		var ay = "0" + ay
+		 }
+
+if(oyunKey=='yeni oyun'){
+var event = confirm("Oyun bitmeden oyunu silemezsiniz! Oyununuz tıkanmış ise rakibinizden onay alarak bu oyunu silebilirsiniz. Rakibinize onay mesajı göndermek istiyor musunuz?")
+if(event==true){
+silmeKodu=firebase.database().ref("silme istekleri").push().key
+	firebase.database().ref('silme istekleri/'+silmeKodu).set({
+    silmeFrom: kullaniciAdi,
+	  silmeWith: person,
+	  silmeKodu: silmeKodu,
+	  silinecekOyunKodu: eKey,
+	  tarih: gun+'.'+ay+'.'+yil+'-'+saat+':'+dakika,
+  });
+}
+
+}else{
+var olay = confirm("Oyun kullanıcılardan karşılıklı olarak silinecektir!")
+if(olay==true){
+var querE = firebase.database().ref("oyunlar/"+eKey); 
+querE.remove()
+}
+}
+
+}
+
+
+function profilYukle(pl){
+$('#profilRankingSpace').html('')
+$('#gamesSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#profilSayfasi').show()
+
+var oyunMesaji=pl.innerHTML
+var ismBasi = oyunMesaji.indexOf('none">')
+var ismSonu = oyunMesaji.indexOf('@@')
+var rakipİsmi=oyunMesaji.slice(ismBasi+6,ismSonu)
+$('#profilSpanAdi').html(' @'+rakipİsmi)
+
+var querP = firebase.database().ref("kullanicilar"); 
+querP.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+if(data.user==rakipİsmi){
+$('#profilToplamPuan').html(data.toplamPuan)
+$('#profilPuan').html(data.puantaj)
+$('#profilBitenOyunSpace').html(data.bitenOyun)
+$('#profilJetonSpace').html(data.tasPuan)
+}
+});
+});
+
+
+var veri=[]
+var veriKullaniciKodu=[]
+var veriPuantaj=[]
+var veriPuan = []
+var veriUser=[]
+var querQ = firebase.database().ref("kullanicilar"); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+veri.push(data.kullaniciKodu)		
+veri.push(data.toplamPuan)
+veri.push(data.user)
+});
+});
+
+setTimeout(function(){
+
+for(i=0;i<(veri.length)/3;i++){
+	veriKullaniciKodu.push(veri[3*i])
+	veriPuantaj.push(veri[3*i+1])
+	veriPuan.push(veri[3*i+1])
+	veriUser.push(veri[3*i+2])
+	}
+var exa = []
+var siraliNameList=[]
+for(i=0;i<(veri.length)/3;i++){
+exa[i] = [veriKullaniciKodu[i],veriPuantaj[i],veriUser[i]]
+}
+var sfx = (veri.length)/3
+for(i=0;i<sfx;i++){
+veriPuantaj.sort(function(a,b){
+return b-a;
+});
+var bigIndex = veriPuan.indexOf(veriPuantaj[0])
+siraliNameList.push(exa[bigIndex][2])
+exa.splice(bigIndex,1)
+veriPuan.splice(bigIndex,1)
+veriPuantaj.shift()
+}
+
+var opponentRanking = siraliNameList.indexOf(rakipİsmi)+1
+$('#profilRankingSpace').html(opponentRanking)
+
+$('#byuzdeProfil').html("")
+var tP = $('#profilPuan').html()
+var tB = $('#profilBitenOyunSpace').html()
+if(tB==0 || tP==0){
+$('#byuzdeStyleProfil').css('width','0%')
+}else{
+var basariYuzdesi = Math.floor((tP*100)/tB)
+$('#byuzdeProfil').html("%"+basariYuzdesi)
+$('#byuzdeStyleProfil').css('width',basariYuzdesi+'%')
+}
+
+},300)
+
+
+}
+
+
+
+function hamleSirasi(){
+var oyunKeys = []
+var players = []
+var siralarKimde = []
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var query = firebase.database().ref("oyunlar");
+query.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var dataP = childSnapshot.val();
+if(dataP.from==kullaniciAdi || dataP.with == kullaniciAdi){
+oyunKeys.push(dataP.oyunkodu)
+}
+});
+});
+ for(d=0;d<oyunKeys.length;d++){
+	var queryV = firebase.database().ref("oyunlar/"+oyunKeys[d]);
+	queryV.on('value', function (snapshot){
+	snapshot.forEach(function (childSnapshot){
+		var dataH = childSnapshot.val();
+		players.push(dataH.with)
+	});
+	});
+ siralarKimde.push(players[players.length-7])
+ }
+
+}
+
+
+function control1(){
+Push.create("bildirim")
+}
+
+
+
+function sohbeteGir(fl){
+$('#gamesSayfasi').hide()
+$('#messagesSayfasi').show()
+
+var oyunMesaji=fl.innerHTML
+var mesajBasi = oyunMesaji.indexOf('#@!')
+var mesajSonu = oyunMesaji.indexOf('*?')
+var sKey = oyunMesaji.slice(mesajBasi+3,mesajSonu)
+
+var gnMesaji=fl.innerHTML
+var gnBasi = gnMesaji.indexOf('#€*')
+var gnSonu = gnMesaji.indexOf('€@')
+var gameNum = gnMesaji.slice(gnBasi+30,gnSonu)
+
+var isimMesaji=fl.innerHTML
+var isimBasi = isimMesaji.indexOf('?!')
+var isimSonu = isimMesaji.indexOf('#@!')
+var sİsim = isimMesaji.slice(isimBasi+2,isimSonu)
+$('#messagesOpponentName').html('@'+sİsim)
+$('#sohbetKodu').html(sKey)
+
+if(document.getElementsByClassName("fas fa-circle mesajBild")[gameNum].style.color == "red"){
+
+var mjKodu = []
+sonMjKodu = []
+var queryC = firebase.database().ref("oyunlar/"+sKey+'/mesajlar');
+queryC.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var dataC = childSnapshot.val();
+mjKodu.push(dataC.mesajKodu)
+});
+sonMjKodu.push(mjKodu[mjKodu.length-3])
+});
+
+var queryD = firebase.database().ref("oyunlar/"+sKey+'/mesajlar/'+sonMjKodu);
+queryD.update({
+	okundu:"evet"
+});
+
+}else{
+
+}
+
+
+
+sohbetYukle()
+}
+
+
+
+var trashList = []
+var messageList = []
+
+
+function mesajSec(bl){
+if(bl.style.background!="red"){
+document.getElementById("trash").style.color= "red"
+bl.style.background= "red"
+var mj = bl.innerHTML
+var mjBas = mj.indexOf('?!')
+var kimden = mj.slice(mjBas,mjBas+3)
+var keyBas = mj.indexOf("#-")
+var keySon = mj.indexOf("**")
+trashKey = mj.slice(keyBas+1,keySon)
+trashList.push(trashKey)
+}else{
+var mj = bl.innerHTML
+var mjBas = mj.indexOf('?!')
+var kimden = mj.slice(mjBas,mjBas+3)
+var keyBas = mj.indexOf("#-")
+var keySon = mj.indexOf("**")
+trashKey = mj.slice(keyBas+1,keySon)
+var jj = trashList.indexOf(trashKey)
+trashList.splice(jj,1)
+if(kimden=="?!K"){
+bl.style.background= "#87CEFA"
+}else if(kimden=="?!B"){
+bl.style.background= "#E0E0E0"
+}
+}
+if(trashList.length==0){
+document.getElementById("trash").style.color= "gray"
+}
+}
+
+
+
+function trashMode(){
+if(document.getElementById("trash").style.color=="red"){
+var oyunKodu = $('#sohbetKodu').html()
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var alan = $('#messagesOpponentName').html()
+var aliciKisi = alan.slice(1,alan.length)
+for(i=0;i<trashList.length;i++){
+var j = trashList[i]
+firebase.database().ref("oyunlar/"+oyunKodu+"/mesajlar/" + j).remove()
+}
+document.getElementById("trash").style.color= "gray"
+trashList.splice(0,trashList.length)
+if($("#messagesSayfasiBody").html()==""){
+firebase.database().ref("oyunlar/"+oyunKodu).update({
+mesajlar:""
+})
+firebase.database().ref('oyunlar/' + oyunKodu + '/mesajlar').update({ 
+   oyuncu1:kullaniciAdi,
+   oyuncu2:aliciKisi
+});
+alert("Mesaj kutusu boşaltıldı.")
+}
+}
+}
+
+
+function mesajGonder(){
+if($('#mesaj').val()!='' && document.getElementById('trash').style.color=="gray"){
+var tarih = new Date()
+ var saat = Number(tarih.getHours())
+ var dakika = parseInt(tarih.getMinutes())
+ 		if(dakika<10){
+ 		var dakika = "0" + dakika
+		 }
+		 if(saat<10){
+ 		var saat = "0" + saat
+		 }
+ var gun = parseInt(tarih.getDate())
+ var ay = parseInt(tarih.getMonth())+1
+ var yil = parseInt(tarih.getFullYear())
+ 		if(gun<10){
+ 		var gun = "0" + gun
+		 }
+		 if(ay<10){
+ 		var ay = "0" + ay
+		 }
+		 
+var mesaj = $('#mesaj').val()	 
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var alan = $('#messagesOpponentName').html()
+var aliciKisi = alan.slice(1,alan.length)
+var oyunKodu = $('#sohbetKodu').html()
+
+var messageKey = firebase.database().ref('oyunlar/' + oyunKodu + '/mesajlar').push().key;
+firebase.database().ref('oyunlar/' + oyunKodu + '/mesajlar/' + messageKey).set({ 
+   gonderici: kullaniciAdi,
+   alici: aliciKisi,
+   tarih: gun+'.'+ay+'.'+yil+'-'+saat+':'+dakika,
+   mesaj: mesaj,
+   mesajKodu: messageKey,
+   okundu: 'hayir'
+});
+
+firebase.database().ref('oyunlar/' + oyunKodu + '/mesajlar').update({ 
+   oyuncu1:kullaniciAdi,
+   oyuncu2:aliciKisi
+});
+
+$('#mesaj').val('')
+}
+
+}
+
+
+
+
+function sohbetYukle(){
+var uyariMesaji = `<h4>Dikkat! Mesajlaşmalarınız oynadığınız oyunlara özeldir. Oyununuzu sildiğinizde veya yeniden oynadığınızda oyuna ait mesajlarınız otomatik olarak silinecektir.</h4>`
+$('#messagesSayfasiBody').html("")
+document.getElementById("trash").style.color= "gray"
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var oyunKodu = $('#sohbetKodu').html()
+var query = firebase.database().ref("oyunlar/"+oyunKodu+"/mesajlar"); 
+ query.on('value', function (snapshot){
+ var dataP = snapshot.val()
+ var rakip = $('#messagesOpponentName').html().slice(1,$('#messagesOpponentName').html().length)
+ if(dataP.oyuncu1 == rakip || dataP.oyuncu2 == rakip){
+ $('#messagesSayfasiBody').html('')
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val();
+ 
+if(data.gonderici==kullaniciAdi){
+var ileti = `<div class="container"><div  class="row"><div class="d-flex justify-content-end" > 
+ <div class="alert alert-info" style= "margin-top:0px;float:right;border-width:0px 0px 0px 0px;border-radius:20px 20px 2px 20px;background:#87CEFA" role="alert" onclick= "mesajSec(this)"><span style="display:none"></span><span style="">`+data.mesaj+`</span><b><span  style="font-size:13px">  `+data.tarih+`</span></b><span style="display:none">?!K#`+data.mesajKodu+`**</span>
+ </div> 
+ </div></div></div>`; 
+ }else{
+ var ileti = `<div  class="container"><div  class="row"><div class="d-flex" > 
+ <div class="alert alert-dark" style= "margin-top:0px;float:left;border-color:#eeeeee;border-width:0px 0px 0px 0px;border-radius:2px 20px 20px 20px;background:#e0e0e0" role="alert" onclick= "mesajSec(this)"><span style="display:none"></span><span style="">`+data.mesaj+`</span><b><span style="font-size:13px">  `+data.tarih+`</span></b><span style="display:none">?!B#`+data.mesajKodu+`**</span>
+ </div> 
+ </div></div></div>`; 
+ }
+ 
+ if(data.gonderici!=undefined || data.alici!=undefined){
+ $('#messagesSayfasiBody').append(ileti)
+ }
+ 
+ $("#messagesSayfasiBody").scrollTop($('#messagesSayfasiBody')[0].scrollHeight - $('#messagesSayfasiBody')[0].clientHeight); 
+
+ });
+ }
+ });
+  
+if($('#messagesSayfasiBody').html()==""){
+$('#messagesSayfasiBody').append(uyariMesaji)
+}
+$('#sheet').html('sohbet sayfasi')
+}
+
+
+
+
+
+
+function gamesYukle(){
+var gn = 0
+var oyunlar=[]
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var query = firebase.database().ref("oyunlar"); 
+ query.on('value', function (snapshot){    
+ $("#gamesSayfasiBody").html("")
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+
+ 
+ var oyuncu1 = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px" ondblClick="profilYukle(this)">
+ <div style="background:#c8e6c9;color:black" class="alert alert-success" role="alert"> 
+<b> `+ data.with +` </b><i id="oyunBild" class="fas fa-circle oyunBild" style="color:#c8e6c9;font-size:11px;display:block;float:right"></i>
+ <i style="font-size:30px;float:right;margin-top:-1px" class="fas fa-play-circle" onClick="oyunYukle(this)"><span style="display:none">`+ data.with + `@@`+data.oyunkodu+`##</span></i>
+ <i style="font-size:19px;float:right;margin-right:28px;margin-top:4px" class="fas fa-trash-alt" onClick="gameErase(this)"><span style="display:none">__`+data.oyun+`$$</span><span style="display:none">**`+data.oyunkodu+`##</span><span style="display:none">#p@`+data.with+`@p#</span></i>
+ <i style="font-size:21px;float:right;margin-right:23px;margin-top:4px" class="fas fa-comment-dots" onClick="sohbeteGir(this)"><span style="display:none">€*`+gn+`€@</span><i class="fas fa-circle mesajBild" style="color:#c8e6c9;font-size:10px;display:block;float:right"></i><span style="display:none">?!`+ data.with + `#@!`+data.oyunkodu+`*?</span></i></i>
+ </div> 
+ </div>`;  
+ 
+ var oyuncu2 = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px" ondblClick="profilYukle(this)"> 
+ <div style="background:#c8e6c9;color:black" class="alert alert-success" role="alert"> 
+ <b>`+ data.from + ` </b> <i id="oyunBild" class="fas fa-circle oyunBild" style="color:#c8e6c9;font-size:11px;display:block;float:right"></i>
+ <i style="font-size:30px;float:right;margin-top:-1px" class="fas fa-play-circle" onClick="oyunYukle(this)"><span style="display:none">`+ data.from + `@@`+data.oyunkodu+`##</span></i>
+ <i style="font-size:19px;float:right;margin-right:28px;margin-top:4px" class="fas fa-trash-alt" onClick="gameErase(this)"><span style="display:none">__`+data.oyun+`$$</span><span style="display:none">**`+data.oyunkodu+`##</span><span style="display:none">#p@`+data.from+`@p#</span></i>
+ <i style="font-size:21px;float:right;margin-right:23px;margin-top:4px" class="fas fa-comment-dots" onClick="sohbeteGir(this)"><span style="display:none">€*`+gn+`€@</span><i class="fas fa-circle mesajBild" style="color:#c8e6c9;font-size:10px;display:block;float:right"></i><span style="display:none">?!`+ data.from + `#@!`+data.oyunkodu+`*?</span></i>
+ </div> 
+ </div>`;  
+ 
+ 
+ 
+ if(data.from==kullaniciAdi){
+ $("#gamesSayfasiBody").append(oyuncu1);
+ oyunlar.push(data.with)
+ gn=gn+1
+ }else if(data.with==kullaniciAdi){
+ $("#gamesSayfasiBody").append(oyuncu2);
+ oyunlar.push(data.from)
+ gn=gn+1
+ }
+ });
+ });
+setTimeout(function(){
+if(oyunlar.length==0){
+var mj = `<h4>Henüz bir oyununuz yok! Oyuna başlamak için; "<i class="fas fa-plus-circle"></i>" butonuna basarak arkadaşlarınıza oyun isteği gönderebilirsiniz.</h4>`
+$('#gamesSayfasiBody').html('')
+$('#gamesSayfasiBody').append(mj)
+$('#plusC').css('color','green')
+}else{
+$('#plusC').css('color','black')
+}
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+
+
+var oyunKeys = []
+var players = []
+var oyunDurumu = []
+var sonOynayanlar = []
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var query = firebase.database().ref("oyunlar");
+query.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var dataP = childSnapshot.val();
+if(dataP.from==kullaniciAdi || dataP.with == kullaniciAdi){
+oyunKeys.push(dataP.oyunkodu)
+oyunDurumu.push(dataP.oyun)
+}
+});
+});
+ for(d=0;d<oyunKeys.length;d++){
+	var queryV = firebase.database().ref("oyunlar/"+oyunKeys[d]);
+	queryV.on('value', function (snapshot){
+	snapshot.forEach(function(childSnapshot){
+		var dataH = childSnapshot.val();
+			players.push(dataH.from)
+		});
+	});
+	
+	if(players[players.length-8]==undefined){
+	sonOynayanlar.push("bosluk")
+	}else if(players[players.length-8]!=undefined){
+	sonOynayanlar.push(players[players.length-8])
+	}
+ 
+ }
+ 
+for(g=0;g<oyunlar.length;g++){
+	if(sonOynayanlar[g]=="bosluk"){
+	document.getElementsByClassName("fas fa-circle oyunBild")[g].style.color = "#c8e6c9"
+	}else if(sonOynayanlar[g]!=kullaniciAdi && oyunDurumu[g]=="yeni oyun"){
+		document.getElementsByClassName("fas fa-circle oyunBild")[g].style.color = "red"
+	}else if(sonOynayanlar[g]==kullaniciAdi || oyunDurumu[g]!="yeni oyun"){
+	document.getElementsByClassName("fas fa-circle oyunBild")[g].style.color = "#c8e6c9"
+	}
+}
+
+
+sohbetKodlari = []
+mesajKisileri = []
+sonKisi = []
+okundular = []
+sonOkundu =  []
+var queryK = firebase.database().ref("oyunlar");
+queryK.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var dataD = childSnapshot.val();
+if(dataD.from == kullaniciAdi || dataD.with == kullaniciAdi){
+sohbetKodlari.push(dataD.oyunkodu)
+}
+});
+});
+for(b=0;b<sohbetKodlari.length;b++){
+var queryC = firebase.database().ref("oyunlar/"+sohbetKodlari[b]+'/mesajlar');
+queryC.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var dataC = childSnapshot.val();
+mesajKisileri.push(dataC.gonderici)
+okundular.push(dataC.okundu)
+});
+sonKisi.push(mesajKisileri[mesajKisileri.length-3])
+sonOkundu.push(okundular[okundular.length-3])
+});
+}
+
+for(k=0;k<sonKisi.length;k++){
+	if(sonKisi[k]==kullaniciAdi || sonKisi[k] == undefined){
+		document.getElementsByClassName("fas fa-circle mesajBild")[k].style.color = "#c8e6c9"
+	}else if(sonKisi[k]!=kullaniciAdi && sonKisi[k] != undefined&&sonOkundu[k]=="hayir"){
+	document.getElementsByClassName("fas fa-circle mesajBild")[k].style.color = "red"
+	}
+}
+
+
+},1500)
+}
+
+
+
+function istekYukle(){
+var istekler=[]
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var gelenBaslik = "<h3><u>Gelen İstekler</u></h3>"
+var query = firebase.database().ref("istekler"); 
+ query.on('value', function (snapshot){  
+ $("#gelenSayfasiBody").html("")
+ $("#gelenSayfasiBody").append(gelenBaslik)
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ 
+ 
+ var istekKisisi1 = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px"> 
+ <div class="alert alert-info" role="alert"> 
+ `+ data.with + `<span style="display:none">??`+data.istekkodu+`??</span>
+ <button type="button" onClick="istekKabulEt(this)" class="btn btn-success" style= "float:right;margin-top:-5px"><span style="display:none">??`+data.istekkodu+`!!</span><span style="display:none">**`+data.with+`##</span>Kabul Et</button>
+ <button type="button" onClick="istekYoksay(this)" class="btn btn-danger" style= "float:right;margin-right:15px;margin-top:-5px"><span style="display:none">??`+data.istekkodu+`!!</span>Yoksay</button>
+ </div> 
+ </div>`;  
+ 
+ var istekKisisi2 = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px"> 
+ <div class="alert alert-info" role="alert"> <b>
+ `+ data.from + `</b><span style="display:none">??`+data.istekkodu+`??</span><br>
+ <span>`+data.tarih+`</span>
+ <button type="button" onClick="istekKabulEt(this)" class="btn btn-success" style= "float:right;margin-top:-16px"><span style="display:none">??`+data.istekkodu+`!!</span><span style="display:none">**`+data.from+`##</span>Kabul Et</button>
+ <button type="button" onClick="istekYoksay(this)" class="btn btn-danger" style= "float:right;margin-right:15px;margin-top:-16px"><span style="display:none">??`+data.istekkodu+`!!</span>Yoksay</button>
+ </div> 
+ </div>`;  
+ 
+ if(data.from==kullaniciAdi){
+ 
+ }else if(data.with==kullaniciAdi){
+ $("#gelenSayfasiBody").append(istekKisisi2);
+ istekler.push(istekKisisi2)
+ }
+ });
+ });
+ $('#bildirimSayisi').html(istekler.length)
+}
+
+
+
+function gonderilenİstekYukle(){
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var gondBaslik = "<h3><u>Gönderilen İstekler</u></h3>"
+var query = firebase.database().ref("istekler"); 
+ query.on('value', function (snapshot){  
+ $("#gidenİstekSayfasiBody").html("")
+ $("#gidenİstekSayfasiBody").append(gondBaslik)
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ 
+ var gondist = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px"> 
+ <div class="alert alert-warning" role="alert"> 
+<b> `+ data.with +`</b>
+ <span style="float:right">`+data.tarih+`</span>
+ <button type="button" onClick="istekİptal(this)" class="btn btn-danger" style= "float:right;margin-right:8px;margin-top:-5px"><span style="display:none">#*`+data.istekkodu+`?!</span>İptal Et</button>
+ </div> 
+ </div>`;  
+ 
+if(data.from==kullaniciAdi){
+ $("#gidenİstekSayfasiBody").append(gondist);
+ }
+ });
+ });
+}
+
+
+
+function istekSay(){
+var istekler=[]
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var query = firebase.database().ref("istekler"); 
+ query.on('value', function (snapshot){ 
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ 
+ var istekKisisi2 = data.from
+ 
+ if(data.with==kullaniciAdi){
+ istekler.push(istekKisisi2)
+ }
+ });
+ });
+ $('#bildirimSayisi').html(istekler.length)
+}
+
+
+
+function newGame3(){
+var isteklerim = []
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var query = firebase.database().ref("istekler"); 
+ query.on('value', function (snapshot){  
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ if(data.with==kullaniciAdi){
+ isteklerim.push(data.from);
+ }
+ });
+ });
+var rakipAdi = document.getElementById('nameSpace').innerHTML
+if(isteklerim.indexOf(rakipAdi)==-1){
+var key = $('#keySpace').html()
+firebase.database().ref('oyunlar/'+key).remove()
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+istekKodu=firebase.database().ref("istekler").push().key
+	firebase.database().ref('istekler/'+istekKodu).set({
+    from:kullaniciAdi,
+    with:rakipAdi,
+    istekkodu:istekKodu,
+  });
+alert("Oyun İsteğiniz Başarıyla Gönderildi!")
+$('#buttonNewGame').hide()
+back();
+}else{
+alert("Bu kullanıcıdan size gönderilmiş bir istek zaten var!")
+$('#rakipKadi').val('')
+bolt();
+}
+}
+
+
+
+function istekİptal(ipl){
+var iptalMesaji=ipl.innerHTML
+var iptalBasi = iptalMesaji.indexOf('#*')
+var iptalSonu = iptalMesaji.indexOf('?!')
+var istekKey = iptalMesaji.slice(iptalBasi+2,iptalSonu)
+firebase.database().ref('istekler/'+istekKey).remove()
+alert("Oyun isteğiniz iptal edildi.")
+}
+
+
+
+
+function istekYoksay(al){
+var keyMesaji=al.innerHTML
+var mesajBasi = keyMesaji.indexOf('??')
+var mesajSonu = keyMesaji.indexOf('!!')
+var iKey = keyMesaji.slice(mesajBasi+2,mesajSonu)
+firebase.database().ref('istekler/'+iKey).remove()
+istekYukle()
+}
+
+function istekKabulEt(ol){
+var keyMesaji=ol.innerHTML
+var mesajBasi = keyMesaji.indexOf('??')
+var mesajSonu = keyMesaji.indexOf('!!')
+var iKey = keyMesaji.slice(mesajBasi+2,mesajSonu)
+var isimMesaji=ol.innerHTML
+var isimBasi = isimMesaji.indexOf('**')
+var isimSonu = isimMesaji.indexOf('##')
+var isim = isimMesaji.slice(isimBasi+2,isimSonu)
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var rakipAdi = document.getElementById('rakipKadi').value
+var alan = $('#messagesOpponentName').html()
+var aliciKisi = isim
+oyunKodu=firebase.database().ref("oyunlar").push().key
+	firebase.database().ref('oyunlar/'+oyunKodu).set({
+    from:isim,
+    with:kullaniciAdi,
+    oyunkodu:oyunKodu,
+    skorFrom:"0",
+    skorWith:"0",
+    oyun:"yeni oyun",
+    mesajlar:"",
+  });
+firebase.database().ref('oyunlar/' + oyunKodu + '/mesajlar').update({ 
+   oyuncu1:aliciKisi,
+   oyuncu2:kullaniciAdi,
+});
+firebase.database().ref('istekler/'+iKey).remove()
+back();
+}
+
+
+function silmeKabulEt(ol){
+var keyMesaji=ol.innerHTML
+var mesajBasi = keyMesaji.indexOf('??')
+var mesajSonu = keyMesaji.indexOf('!!')
+var iKey = keyMesaji.slice(mesajBasi+2,mesajSonu)
+var isimMesaji=ol.innerHTML
+var isimBasi = isimMesaji.indexOf('**')
+var isimSonu = isimMesaji.indexOf('##')
+var isim = isimMesaji.slice(isimBasi+2,isimSonu)
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var rakipAdi = document.getElementById('rakipKadi').value
+var alan = $('#messagesOpponentName').html()
+var aliciKisi = isim
+var sKeyBasi = keyMesaji.indexOf('@@')
+var sKeySonu = keyMesaji.indexOf('*c')
+var sKey = keyMesaji.slice(sKeyBasi+2,sKeySonu-14)
+
+firebase.database().ref("oyunlar/"+sKey).remove()
+firebase.database().ref("silme istekleri/"+iKey).remove()
+alert("Oyununuz başarıyla silindi.")
+back()
+}
+
+
+function silmeYoksay(al){
+var keyMesaji=al.innerHTML
+var mesajBasi = keyMesaji.indexOf('??')
+var mesajSonu = keyMesaji.indexOf('!!')
+var iKey = keyMesaji.slice(mesajBasi+2,mesajSonu)
+firebase.database().ref("silme istekleri/"+iKey).remove()
+}
+
+
+function sayacOlustur(){
+var query = firebase.database().ref('sayaçlar/giriş sayacı')
+query.on('value',function(snapshot){
+var data = snapshot.val()
+var oldG = Number(data.Giriş)
+var newG = oldG + 1
+localStorage.setItem('girisSayisi',newG)
+});
+
+firebase.database().ref('sayaçlar/giriş sayacı').update({
+Giriş:localStorage.getItem('girisSayisi'),
+});
+}
+
+
+
+
+function istekGonder(){
+var isteklerim = []
+var gidenİsteklerim = []
+var oyunlarim = []
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+if($('#rakipKadi').val()!=kullaniciAdi){
+var rakipAdi = document.getElementById('rakipKadi').value
+var query = firebase.database().ref("istekler"); 
+ query.on('value', function (snapshot){  
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ if(data.from==kullaniciAdi){ 
+ gidenİsteklerim.push(data.with);
+ }else if(data.with==kullaniciAdi){
+ isteklerim.push(data.from);
+ }
+ });
+ });
+ 
+var useres = [] 
+var querM = firebase.database().ref("kullanicilar"); 
+querM.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+useres.push(data.user)
+});
+});
+
+var queryZ = firebase.database().ref("oyunlar"); 
+ queryZ.on('value', function (snapshot){  
+ snapshot.forEach(function (childSnapshot){  
+ var dataZ = childSnapshot.val(); 
+ if(dataZ.from==kullaniciAdi){
+ oyunlarim.push(dataZ.with)
+ }
+ });
+ });
+
+  
+setTimeout(function(){  
+if(isteklerim.indexOf(rakipAdi)!=-1){
+alert("Bu kullanıcıdan size gönderilmiş bir istek zaten var!")
+$('#rakipKadi').val('')
+bolt();
+}else if(gidenİsteklerim.indexOf(rakipAdi)!=-1){
+alert('Bu kullanıcıya gönderilmiş bir isteğiniz zaten bulunuyor!')
+$('#rakipKadi').val('')
+gidenİstek()
+}else if(useres.indexOf(rakipAdi)==-1){
+alert('Bu isimde bir kullanıcı bulunamadı!')
+$('#rakipKadi').val('')
+}else if(oyunlarim.indexOf(rakipAdi)!=-1){
+alert('Bu kullanıcı ile zaten devam etmekte olan bir oyununuz bulunmakta!')
+$('#rakipKadi').val('')
+back()
+}else{
+var tarih = new Date()
+ var saat = Number(tarih.getHours())
+ var dakika = parseInt(tarih.getMinutes())
+ 		if(dakika<10){
+ 		var dakika = "0" + dakika
+		 }
+		 if(saat<10){
+ 		var saat = "0" + saat
+		 }
+ var gun = parseInt(tarih.getDate())
+ var ay = parseInt(tarih.getMonth())+1
+ var yil = parseInt(tarih.getFullYear())
+ 		if(gun<10){
+ 		var gun = "0" + gun
+		 }
+		 if(ay<10){
+ 		var ay = "0" + ay
+		 }
+ 
+istekKodu=firebase.database().ref("istekler").push().key
+	firebase.database().ref('istekler/'+istekKodu).set({
+    from:kullaniciAdi,
+    with:rakipAdi,
+    istekkodu:istekKodu,
+    tarih:gun+'.'+ay+'.'+yil+'-'+saat+':'+dakika,
+  });
+document.getElementById('rakipKadi').value= ""
+alert("Oyun İsteğiniz Başarıyla Gönderildi!")
+back();
+}
+
+},300)
+ 
+}else{
+alert('Kendi kullanıcı adınıza istek gönderemezsiniz!')
+}
+}
+
+
+
+
+function allLocalStoragesDelete(){
+localStorage.clear()
+}
+
+
+window.onload = function () {
+var elmnt=document.getElementById("logo")
+elmnt.classList.add("logo-ek")
+setTimeout(function(){
+$('#logoSayfasi').hide()
+$('#loginSayfasi').show()		
+
+sayacOlustur()
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+if(localStorage.getItem("kullaniciAdi") != null){
+var kullaniciKodu = localStorage.getItem('userCode')
+var querQ = firebase.database().ref("kullanicilar/"+kullaniciKodu); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = snapshot.val();
+		$('#userCodeSpace').html(kullaniciKodu)
+		$('#tPuan').html(data.puantaj)
+		$('#tasPuan').html(data.tasPuan)
+		$('#toplamPuan').html(data.toplamPuan)
+		$('#kSpanAdi').html('@'+data.user)
+		var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+		return false;
+});
+});
+kayitliUyeGirisi()
+}else{
+girisControl()
+}
+},2000)
+}
+
+window.onkeydown=function(event){
+	if(event.keyCode==13){
+		if($('#sheet').html()=="giris sayfasi"){
+			login()
+		}else if($('#sheet').html()=="kayit sayfasi"){
+			girisControl()
+		}else if($('#sheet').html()=="istek gonder sayfasi"){
+			istekGonder()
+		}else if($('#sheet').html()=="sohbet sayfasi"){
+			mesajGonder()
+		}
+	}
+}
+
+
+
+function girisControl(){
+$('#sheet').html('giris sayfasi')
+$('#girisDurumSpace').html('')
+var kullaniciAdi = $('#kadi').val()
+if(document.getElementById('kadi').value!=""){
+var kullaniciKodu = localStorage.getItem('userCode')
+var querQ = firebase.database().ref("kullanicilar"); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+		if(data.user==kullaniciAdi){
+			$('#girisDurumSpace').html('Bu isimde bir kullanıcı zaten var. Lütfen başka bir kullanıcı adı seçin!')
+		return false;
+		}else{
+			if($('#girisDurumSpace').html()==""){
+				$('#girisDurumSpace').html('Lütfen bekleyiniz..')
+			}
+		}
+});
+});
+
+setTimeout(function(){
+if($('#girisDurumSpace').html()=='Bu isimde bir kullanıcı zaten var. Lütfen başka bir kullanıcı adı seçin!'){
+		}else{
+alert("Kullanıcı Başarıyla Kaydedildi. Gambit'e Hoşgeldiniz!")
+yeniUyeGirisi();
+}
+},3500)
+}
+}
+
+
+
+function kayitliUyeGirisi(){
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#oyunSayfasi').hide()
+$("#girisSayfasi").hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$("#gamesSayfasi").show()	
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+$('#kSpanAdi').html('@'+kullaniciAdi)
+gamesYukle()
+back()
+}
+
+
+function eraseState(){
+
+}
+
+
+function yeniUyeGirisi(){
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#oyunSayfasi').hide()
+$("#girisSayfasi").hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$("#gamesSayfasi").show()
+var kadi = $('#kadi').val()
+var parola = $('#parolaKayit').val()
+localStorage.setItem('kullaniciAdi',kadi)
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+$('#kSpanAdi').html('@'+kullaniciAdi)
+var kullaniciKodu=firebase.database().ref("kullanicilar").push().key
+	firebase.database().ref('kullanicilar/'+kullaniciKodu).set({
+    user:kadi,
+    puantaj:0,
+    kullaniciKodu:kullaniciKodu,
+    şifre:parola,
+    bitenOyun:0,
+    tasPuan:0,
+    toplamPuan:0,
+  });
+localStorage.setItem('userCode',kullaniciKodu)
+var kullaniciKodu = localStorage.getItem('userCode')
+var query = firebase.database().ref("kullanicilar")
+query.on('value',function(snapshot){
+snapshot.forEach(function(childSnapshot){
+
+});
+});
+$('#tPuan').html("0")
+$('#userCodeSpace').html(kullaniciKodu)
+gamesYukle()
+back()
+}
+
+function animeStartWhite(){ 
+	 var element=document.getElementById("buttonWhite")
+	 setTimeout(function(){
+	 	element.classList.add("okBtn-ek")
+	 },500)	  	 
+	 setTimeout(function(){
+	 	element.classList.remove("okBtn-ek")
+	 },800)	  
+}
+
+function animeStartBlack(){ 
+	 var element=document.getElementById("buttonBlack")
+	 setTimeout(function(){
+	 	element.classList.add("okBtn-ek")
+	 },500)	  	 
+	 setTimeout(function(){
+	 	element.classList.remove("okBtn-ek")
+	 },800)	  
+}
+
+
+function burn(el){
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+if($('#gameOwnerSpace').html()==kullaniciAdi){
+	var myColor = "black"
+}else{var myColor = "orange"}
+	 if(el.style.background!='black' && el.style.background!='orange' && el.style.background!='green'){
+		boya();
+		el.style.background="yellow"
+				
+			for(f=0;f<=143;f++){
+			document.getElementsByClassName('determiner')[f].style.display="block"
+if(document.getElementsByClassName('rowStyle')[f].style.background== "black"){
+document.getElementsByClassName('determiner')[f].style.display= "none"
+}else if(document.getElementsByClassName('rowStyle')[f].style.background== "orange"){
+document.getElementsByClassName('determiner')[f].style.display= "none"
+}else if(document.getElementsByClassName('rowStyle')[f].style.background== "darkgray"){
+document.getElementsByClassName('determiner')[f].style.borderColor= "darkgray"
+}
+if(document.getElementsByClassName('rowStyle')[f].style.background== "yellow"){
+	document.getElementsByClassName('determiner')[f].style.borderColor= myColor
+}
+			 }		
+	}else{	
+	var datei=el.innerHTML
+	var dateBasi = datei.indexOf("bsDate")
+	var datem = datei.slice(dateBasi+8,dateBasi+24)
+	alert('Hamle tarihi: '+datem)
+	}
+}
+
+
+function boya(){
+var bosluk = 0
+for(d=0;d<=143;d++){
+	if(document.getElementsByClassName('rowStyle')[d].style.background=="darkgray"){
+			bosluk = bosluk + 1
+	}
+}
+if(bosluk==144){
+animeStartWhite()
+animeStartBlack()
+}
+for(i=0;i<=143;i++){
+if(document.getElementsByClassName('rowStyle')[i].style.background=="yellow"){
+document.getElementsByClassName('rowStyle')[i].style.background= "darkgray"
+document.getElementsByClassName('determiner')[i].style.background= "darkgray"
+}
+}
+}
+
+var renk='black'
+var ts = 0
+
+function yerlestirSiyah(){
+$('#state').html('')
+var isim = $('#nameSpace').html()
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+for(i=0;i<=143;i++){
+	if(document.getElementsByClassName('rowStyle')[i].style.background=="yellow"){
+	
+	var oyunKodu = $('#keySpace').html()
+	
+var hamleKodu=firebase.database().ref("oyunlar/"+oyunKodu).push().key
+
+var tarih = new Date()
+ var saat = Number(tarih.getHours())
+ var dakika = parseInt(tarih.getMinutes())
+ 		if(dakika<10){
+ 		var dakika = "0" + dakika
+		 }
+		 if(saat<10){
+ 		var saat = "0" + saat
+		 }
+ var gun = parseInt(tarih.getDate())
+ var ay = parseInt(tarih.getMonth())+1
+ var yil = parseInt(tarih.getFullYear())
+ 		if(gun<10){
+ 		var gun = "0" + gun
+		 }
+		 if(ay<10){
+ 		var ay = "0" + ay
+		 }
+	firebase.database().ref('oyunlar/'+oyunKodu+'/'+hamleKodu).set({
+    hamle: i+"-B",
+    from:kullaniciAdi,
+    with:isim,
+    tarih:gun+'.'+ay+'.'+yil+'-'+saat+':'+dakika,
+  });  
+	}
+}
+
+var tasSayisi = 0
+for(d=0;d<=143;d++){
+	if(document.getElementsByClassName('rowStyle')[d].style.background!="darkgray"){
+			tasSayisi = tasSayisi + 1
+	}
+}	
+
+var tasPuan=(144-tasSayisi)+112
+
+
+var kullaniciKodu = $('#userCodeSpace').html()
+var querQ = firebase.database().ref("kullanicilar/"+kullaniciKodu);
+		var query = firebase.database().ref("oyunlar/"+oyunKodu);
+			if($('#winner').html()=='Black' && $('#state').html()==''){			
+				if($('#gameOwnerSpace').html()==kullaniciAdi){
+					query.update({
+				 		skorFrom:Number($('#benPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+					querQ.update({
+				 		puantaj:Number($('#tPuan').html())+1,
+				 		toplamPuan:Number($('#toplamPuan').html())+1,
+				 		tasPuan:Number($('#tasPuan').html())+tasPuan			 		
+					});	
+				}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+					query.update({
+				 		skorFrom:Number($('#rakipPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+				}
+			}else if($('#winner').html()=='White' && $('#state').html()==''){
+				if($('#gameOwnerSpace').html()==kullaniciAdi){
+					query.update({
+				 		skorWith:Number($('#rakipPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+				}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+					query.update({
+				 		skorWith:Number($('#benPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+					querQ.update({
+				 		puantaj:Number($('#tPuan').html())+1,
+				 		toplamPuan:Number($('#toplamPuan').html())+1,
+				 		tasPuan:Number($('#tasPuan').html())+tasPuan
+					});	
+				}
+			}
+			
+			
+		if($('#winner').html()=='Black' || $('#winner').html()=='White'){	
+			if($('#state').html()==''){
+			var biten = localStorage.getItem('bitenOyunum')
+			var newS = Number(biten) + 1
+			var kullaniciKodu = $('#userCodeSpace').html()
+var queryS = firebase.database().ref("kullanicilar/"+kullaniciKodu);
+				queryS.update({
+					bitenOyun: newS
+				});
+			}
+		}
+		
+		if($('#winner').html()=='Black' || $('#winner').html()=='White'){	
+			if($('#state').html()==''){
+			var rakipBiten = localStorage.getItem('rakipBitenOyun')
+			var newR = Number(rakipBiten) + 1
+			var rakipKodu = $('#opponentCodeSpace').html()
+var queryR = firebase.database().ref("kullanicilar/"+rakipKodu);
+				queryR.update({
+					bitenOyun: newR
+				});
+			}
+		}
+			
+			
+
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}						
+
+}
+
+
+
+function yerlestirBeyaz(){
+$('#state').html('')
+var isim = $('#nameSpace').html()
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+for(i=0;i<=143;i++){
+	if(document.getElementsByClassName('rowStyle')[i].style.background=="yellow"){
+	
+	var oyunKodu = $('#keySpace').html()
+	
+	var hamleKodu=firebase.database().ref("oyunlar/"+oyunKodu).push().key
+	
+	var tarih = new Date()
+ var saat = Number(tarih.getHours())
+ var dakika = parseInt(tarih.getMinutes())
+ 		if(dakika<10){
+ 		var dakika = "0" + dakika
+		 }
+		 if(saat<10){
+ 		var saat = "0" + saat
+		 }
+ var gun = parseInt(tarih.getDate())
+ var ay = parseInt(tarih.getMonth())+1
+ var yil = parseInt(tarih.getFullYear())
+ 		if(gun<10){
+ 		var gun = "0" + gun
+		 }
+		 if(ay<10){
+ 		var ay = "0" + ay
+		 }
+	firebase.database().ref('oyunlar/'+oyunKodu+'/'+hamleKodu).set({
+    hamle: i+"-W",
+    from:kullaniciAdi,
+    with:isim,
+    tarih:gun+'.'+ay+'.'+yil+'-'+saat+':'+dakika,
+  });
+	}
+}
+
+
+var tasSayisi = 0
+for(d=0;d<=143;d++){
+	if(document.getElementsByClassName('rowStyle')[d].style.background!="darkgray"){
+			tasSayisi = tasSayisi + 1
+	}
+}	
+
+var tasPuan=((144-tasSayisi)*4)+32
+
+var kullaniciKodu = $('#userCodeSpace').html()
+var querQ = firebase.database().ref("kullanicilar/"+kullaniciKodu);
+		var query = firebase.database().ref("oyunlar/"+oyunKodu);
+			if($('#winner').html()=='Black' && $('#state').html()==''){
+				if($('#gameOwnerSpace').html()==kullaniciAdi){
+					query.update({
+				 		skorFrom:Number($('#benPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+					querQ.update({
+				 		puantaj:Number($('#tPuan').html())+1,
+				 		toplamPuan:Number($('#toplamPuan').html())+1,
+				 		tasPuan:Number($('#tasPuan').html())+tasPuan
+					});	
+				}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+					query.update({
+				 		skorFrom:Number($('#rakipPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+				}
+			}else if($('#winner').html()=='White' && $('#state').html()==''){
+				if($('#gameOwnerSpace').html()==kullaniciAdi){
+					query.update({
+				 		skorWith:Number($('#rakipPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+				}else if($('#gameOwnerSpace').html()!=kullaniciAdi){
+					query.update({
+				 		skorWith:Number($('#benPuan').html())+1,
+				 		oyun: "oyun bitti",
+					});	
+					querQ.update({
+				 		puantaj:Number($('#tPuan').html())+1,
+				 		toplamPuan:Number($('#toplamPuan').html())+1,
+				 		tasPuan:Number($('#tasPuan').html())+tasPuan
+					});	
+				}
+			}
+			
+			
+			
+		if($('#winner').html()=='Black' || $('#winner').html()=='White'){	
+			if($('#state').html()==''){
+			var biten = localStorage.getItem('bitenOyunum')
+			var newS = Number(biten) + 1
+			var kullaniciKodu = $('#userCodeSpace').html()
+var queryS = firebase.database().ref("kullanicilar/"+kullaniciKodu);
+				queryS.update({
+					bitenOyun: newS
+				});
+			}
+		}
+		
+		if($('#winner').html()=='Black' || $('#winner').html()=='White'){	
+			if($('#state').html()==''){
+			var rakipBiten = localStorage.getItem('rakipBitenOyun')
+			var newR = Number(rakipBiten) + 1
+			var rakipKodu = $('#opponentCodeSpace').html()
+var queryR = firebase.database().ref("kullanicilar/"+rakipKodu);
+				queryR.update({
+					bitenOyun: newR
+				});
+			}
+		}
+			
+			
+			
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}						
+
+}
+
+
+
+function controlVertical(){
+var tas = document.getElementsByClassName('rowStyle')
+for(f=0;f<12;f++){
+for(k=0;k<8;k++){
+var sayK = 0
+var sayM = 0
+	for(v=k;v<k+5;v++){
+		c=(12*v)+f
+			if(tas[c].style.background=='black'){
+				sayK = sayK + 1
+			}else if(tas[c].style.background=='orange'){
+				sayM = sayM + 1
+			}
+	}
+	if(sayK==5){
+	$(".ballSpan").css({'display':'block'})
+	for(v=k;v<k+5;v++){
+		c=(12*v)+f
+		tas[c].style.background='green'
+	}
+	$('#winner').html('Black')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}else if(sayM==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+		c=(12*v)+f
+		tas[c].style.background='green'
+	}
+	$('#winner').html('White')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}
+}
+}
+}
+
+
+function controlHorizontal(){
+var tas = document.getElementsByClassName('rowStyle')
+for(f=0;f<12;f++){
+for(k=12*f;k<(12*f)+8;k++){
+var sayK = 0
+var sayM = 0
+	for(v=k;v<k+5;v++){
+			if(tas[v].style.background=='black'){
+				sayK = sayK + 1
+			}else if(tas[v].style.background=='orange'){
+				sayM = sayM + 1
+			}
+	}
+	if(sayK==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+		tas[v].style.background='green'
+	}
+	$('#winner').html('Black')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}else if(sayM==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+		tas[v].style.background='green'
+	}
+	$('#winner').html('White')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}
+}
+}
+}
+
+
+function controlLeftToRight(){
+var tas = document.getElementsByClassName('rowStyle')
+for(f=0;f<8;f++){
+for(k=0;k<8;k++){
+var sayK = 0
+var sayM = 0
+	for(v=k;v<k+5;v++){
+		c=(13*v)+f-k
+			if(tas[c].style.background=='black'){
+				sayK = sayK + 1
+			}else if(tas[c].style.background=='orange'){
+				sayM = sayM + 1
+			}
+	}
+	if(sayK==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+	 c=(13*v)+f-k
+		tas[c].style.background='green'
+	}
+	$('#winner').html('Black')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()	
+	return false;
+	}else if(sayM==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+	 c=(13*v)+f-k
+		tas[c].style.background='green'
+	}
+	$('#winner').html('White')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}
+}
+}
+}
+
+
+function controlRightToLeft(){
+var tas = document.getElementsByClassName('rowStyle')
+for(f=11;f>=0;f--){
+for(k=0;k<=8;k++){
+var sayK = 0
+var sayM = 0
+	for(v=k;v<k+5;v++){
+		c=(11*v)+f
+			if(tas[c].style.background=='black'){
+				sayK = sayK + 1
+			}else if(tas[c].style.background=='orange'){
+				sayM = sayM + 1
+			}
+	}
+	if(sayK==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+	 c=(11*v)+f
+		tas[c].style.background='green'
+	}
+	$('#winner').html('Black')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}else if(sayM==5){
+	$(".ballSpan").css('display','block')
+	for(v=k;v<k+5;v++){
+	 c=(11*v)+f
+		tas[c].style.background='green'
+	}
+	$('#winner').html('White')
+	$("#buttonWhite").hide()
+	$("#buttonBlack").hide()
+	$("#buttonNewGame").show()
+	return false;
+	}
+}
+}
+}
+
+
+function newGame(){
+ts = 0
+$('.ballSpan').html('')
+$('.ballSpan').css('display','none')
+for(i=0;i<=143;i++){
+	document.getElementsByClassName('rowStyle')[i].style.background="darkgray"
+}
+var key = $('#keySpace').html()
+var query = firebase.database().ref("oyunlar/"+key); 
+query.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){ 
+$("#buttonNewGame").hide()
+});
+});
+
+var isim = document.getElementById("nameSpace").innerHTML
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+oyunKodu=firebase.database().ref("oyunlar").push().key
+	firebase.database().ref('oyunlar/'+oyunKodu).set({
+    from:isim,
+    with:kullaniciAdi,
+    oyunkodu:oyunKodu,
+    skorFrom:"0",
+    skorWith:"0",
+  });
+$('#keySpace').html(oyunKodu)
+}
+
+
+
+function medalİstekGonder(gl){
+var tn = gl.innerHTML
+var tnBas = tn.indexOf('#*')
+var tnSon = tn.indexOf('?@')
+var medalKisi = tn.slice(tnBas+9,tnSon-27)
+
+var olay = confirm(medalKisi + " adlı kullanıcıya oyun isteği gönderilecek?")
+if(olay==true){
+
+var istekler = []
+var gidenİstekler = []
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+if(medalKisi!=kullaniciAdi){
+var rakipAdi = medalKisi
+var query = firebase.database().ref("istekler"); 
+ query.on('value', function (snapshot){  
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ if(data.from==kullaniciAdi){ 
+ gidenİstekler.push(data.with);
+ }else if(data.with==kullaniciAdi){
+ istekler.push(data.from);
+ }
+ });
+ });
+ 
+var useris = [] 
+var querM = firebase.database().ref("kullanicilar"); 
+querM.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+useris.push(data.user)
+});
+});
+
+var myGames = []
+
+var queryZ = firebase.database().ref("oyunlar"); 
+ queryZ.on('value', function (snapshot){  
+ snapshot.forEach(function (childSnapshot){  
+ var dataZ = childSnapshot.val(); 
+ if(dataZ.from==kullaniciAdi){
+ myGames.push(dataZ.with)
+ }
+ });
+ });
+ 
+  
+setTimeout(function(){  
+if(istekler.indexOf(rakipAdi)!=-1){
+alert("Bu kullanıcıdan size gönderilmiş bir istek zaten var!")
+bolt();
+}else if(gidenİstekler.indexOf(rakipAdi)!=-1){
+alert('Bu kullanıcıya gönderilmiş bir isteğiniz zaten bulunuyor!')
+gidenİstek()
+}else if(useris.indexOf(rakipAdi)==-1){
+alert('Bu isimde bir kullanıcı bulunamadı!')
+}else if(myGames.indexOf(rakipAdi)!=-1){
+alert('Bu kullanıcı ile zaten devam etmekte olan bir oyununuz bulunmakta!')
+$('#rakipKadi').val('')
+back()
+}else{
+var tarih = new Date()
+ var saat = Number(tarih.getHours())
+ var dakika = parseInt(tarih.getMinutes())
+ 		if(dakika<10){
+ 		var dakika = "0" + dakika
+		 }
+		 if(saat<10){
+ 		var saat = "0" + saat
+		 }
+ var gun = parseInt(tarih.getDate())
+ var ay = parseInt(tarih.getMonth())+1
+ var yil = parseInt(tarih.getFullYear())
+ 		if(gun<10){
+ 		var gun = "0" + gun
+		 }
+		 if(ay<10){
+ 		var ay = "0" + ay
+		 }
+ 
+istekKodu=firebase.database().ref("istekler").push().key
+	firebase.database().ref('istekler/'+istekKodu).set({
+    from:kullaniciAdi,
+    with:rakipAdi,
+    istekkodu:istekKodu,
+    tarih:gun+'.'+ay+'.'+yil+'-'+saat+':'+dakika,
+  });
+document.getElementById('rakipKadi').value= ""
+alert("Oyun İsteğiniz Başarıyla Gönderildi!")
+back();
+}
+
+},300)
+ 
+}else{
+alert('Kendi kullanıcı adınıza istek gönderemezsiniz!')
+}
+
+}
+}
+
+
+
+function back(){
+if($('#gidenİstekSayfasi').css('display')=="block" || $('#istekİptalSayfasi').css('display')=="block" || $('#yeniOzelliklerSayfasi').css('display')=="block" || $('#datayliYardimSayfasi').css('display')=="block"){
+	user()
+}else{
+
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#gamesSayfasi').show()
+$('#sheet').html('oyunlar sayfasi')
+gamesYukle();
+}
+}
+
+function question(){
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+$('#gamesSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#yardimSayfasi').show()
+$('#sheet').html('yardim sayfasi')
+}
+
+function bolt(){
+$('#badgeİstek').hide()
+$('#gamesSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#gelenSayfasi').show()
+$('#sheet').html('gelen istek sayfasi')
+istekYukle();
+}
+
+function medal(){
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+var genelBaslik = "<h3><u>Genel Sıralama</u></h3>"
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+$('#gamesSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#siralamaSayfasi').show()
+
+var veri=[]
+var veriKullaniciKodu=[]
+var veriPuantaj=[]
+var veriPuan = []
+var veriUser=[]
+var querQ = firebase.database().ref("kullanicilar"); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+veri.push(data.kullaniciKodu)		
+veri.push(data.toplamPuan)
+veri.push(data.user)
+});
+});
+
+setTimeout(function(){
+for(i=0;i<(veri.length)/3;i++){
+	veriKullaniciKodu.push(veri[3*i])
+	veriPuantaj.push(veri[3*i+1])
+	veriPuan.push(veri[3*i+1])
+	veriUser.push(veri[3*i+2])
+	}
+var exa = []
+for(i=0;i<(veri.length)/3;i++){
+exa[i] = [veriKullaniciKodu[i],veriPuantaj[i],veriUser[i]]
+}
+
+$('#siralamaSayfasiBody').html('')
+$('#siralamaSayfasiBody').append(genelBaslik)
+if((veri.length)/3<=99){
+var sfx = (veri.length)/3
+}else{
+var sfx = 100
+}
+for(i=0;i<sfx;i++){
+veriPuantaj.sort(function(a,b){
+return b-a;
+});
+var bigIndex = veriPuan.indexOf(veriPuantaj[0])
+var player = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px"> 
+ <div class="alert alert-info" role="alert" onClick="medalİstekGonder(this)"> 
+ <span style="display:block">`+(i+1)+ `- <span style="display:none">#*</span>` + exa[bigIndex][2] +`<span style="display:none">?@</span></span><span style="float:right;margin-top:-22px">Puan: `+ exa[bigIndex][1] +`</span>
+ </div> 
+ </div>`;  
+$('#siralamaSayfasiBody').append(player)
+exa.splice(bigIndex,1)
+veriPuan.splice(bigIndex,1)
+veriPuantaj.shift()
+}
+},300)
+
+$('#sheet').html('siralama sayfasi')	
+}
+
+function plus(){
+$('#gamesSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#gidenSayfasi').show()
+
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+$('#sheet').html('istek gonder sayfasi')
+}
+
+
+function user(){
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+$('#gamesSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#kullaniciSayfasi').show()
+
+var veri=[]
+var veriKullaniciKodu=[]
+var veriPuantaj=[]
+var veriPuan = []
+var veriUser=[]
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var querP = firebase.database().ref("kullanicilar"); 
+querP.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+veri.push(data.kullaniciKodu)		
+veri.push(data.toplamPuan)
+veri.push(data.user)
+});
+});
+
+setTimeout(function(){
+
+for(i=0;i<(veri.length)/3;i++){
+	veriKullaniciKodu.push(veri[3*i])
+	veriPuantaj.push(veri[3*i+1])
+	veriPuan.push(veri[3*i+1])
+	veriUser.push(veri[3*i+2])
+	}
+var exa = []
+var siraliNameList=[]
+for(i=0;i<(veri.length)/3;i++){
+exa[i] = [veriKullaniciKodu[i],veriPuantaj[i],veriUser[i]]
+}
+var sfx = (veri.length)/3
+for(i=0;i<sfx;i++){
+veriPuantaj.sort(function(a,b){
+return b-a;
+});
+var bigIndex = veriPuan.indexOf(veriPuantaj[0])
+siraliNameList.push(exa[bigIndex][2])
+exa.splice(bigIndex,1)
+veriPuan.splice(bigIndex,1)
+veriPuantaj.shift()
+}
+var userRanking = siraliNameList.indexOf(kullaniciAdi)+1
+$('#rankingSpace').html(userRanking)
+
+
+var kullaniciKodu = $('#userCodeSpace').html()
+var querQ = firebase.database().ref("kullanicilar/"+kullaniciKodu); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = snapshot.val();
+$('#tPuan').html(data.puantaj)
+$('#bitenOyunSpace').html(data.bitenOyun)
+$('#byuzde').html("")
+$('#byuzde2').html("")
+var tP = $('#tPuan').html()
+var tB = $('#bitenOyunSpace').html()
+if(tB==0 || tP==0){
+$('#byuzdeStyle').css('width','0%')
+}else{
+var basariYuzdesi = Math.floor((tP*100)/tB)
+$('#byuzde').html("%"+basariYuzdesi)
+$('#byuzde2').html("%"+basariYuzdesi)
+$('#byuzdeStyle').css('width',basariYuzdesi+'%')
+}
+});
+});
+
+},400)
+$('#sheet').html('kullanici sayfasi')	
+}
+
+
+
+
+function oyunSilmeİstek(){
+$('#gamesSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#gidenİstekSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#istekİptalSayfasi').show()
+
+var iptalİstekler=[]
+var kullaniciAdi = localStorage.getItem('kullaniciAdi')
+var iptalBaslik = "<h3><u>Oyun Silme İstekleri</u></h3>"
+var query = firebase.database().ref("silme istekleri"); 
+ query.on('value', function (snapshot){  
+ $("#istekİptalSayfasiBody").html("")
+ $("#istekİptalSayfasiBody").append(iptalBaslik)
+ snapshot.forEach(function (childSnapshot){  
+ var data = childSnapshot.val(); 
+ 
+ 
+ var iptalKisisi = `<div class="d-flex justify-content" style="margin-top:16px;font-size:16px"> 
+ <div class="alert alert-info" role="alert"> <b>
+ `+ data.silmeFrom + `</b><span style="display:none">??`+data.silmeKodu+`??</span><br>
+ <span>`+data.tarih+`</span>
+ <button type="button" onClick="silmeKabulEt(this)" class="btn btn-success" style= "float:right;margin-top:-16px"><span style="display:none">??`+data.silmeKodu+`!!</span><span style="display:none">**`+data.silmeFrom+`##</span><span style="display:none">@@`+data.silinecekOyunKodu+`*x</span>Onayla</button>
+ <button type="button" onClick="silmeYoksay(this)" class="btn btn-danger" style= "float:right;margin-right:15px;margin-top:-16px"><span style="display:none">??`+data.silmeKodu+`!!</span>Reddet</button>
+ </div> 
+ </div>`;  
+ 
+ if(data.silmeWith==kullaniciAdi){
+ $("#istekİptalSayfasiBody").append(iptalKisisi);
+ }
+ });
+ });
+
+}
+
+
+
+
+function gidenİstek(){
+istekSay()
+$('#badgeİstek').html($('#bildirimSayisi').html())
+if($('#badgeİstek').html()!=0){
+$('#badgeİstek').show()
+}else{
+$('#badgeİstek').hide()
+}
+$('#gamesSayfasi').hide()
+$('#siralamaSayfasi').hide()
+$('#gidenSayfasi').hide()
+$('#kullaniciSayfasi').hide()
+$('#oyunSayfasi').hide()
+$('#yardimSayfasi').hide()
+$('#profilSayfasi').hide()
+$('#gelenSayfasi').hide()
+$('#loginSayfasi').hide()
+$('#registerSayfasi').hide()
+$('#messagesSayfasi').hide()
+$('#istekİptalSayfasi').hide()
+$('#yeniOzelliklerSayfasi').hide()
+$('#gidenİstekSayfasi').show()
+$('#sheet').html('giden istek listesi sayfasi')
+gonderilenİstekYukle()
+}
+
+
+
+function kayitSayfasi(){
+$('#loginSayfasi').hide()
+$('#registerSayfasi').show()
+$('#sheet').html('kayit sayfasi')
+}
+
+
+
+function loginSayfasi(){
+$('#loginSayfasi').show()
+$('#registerSayfasi').hide()
+}
+
+
+
+function login(){
+if($('#kadiGiris').val()!='' && $('#parolaGiris').val()!=''){
+
+$('#loginDurumSpace').html('')
+var kullanici = $('#kadiGiris').val()
+var sifre = $('#parolaGiris').val()
+var querQ = firebase.database().ref("kullanicilar"); 
+querQ.on('value', function (snapshot){
+snapshot.forEach(function (childSnapshot){
+var data = childSnapshot.val();
+		if(data.user==kullanici && data.şifre==sifre){
+			$('#loginDurumSpace').html('Kullanıcı başarıyla doğrulandı. Lütfen bekleyiniz..')
+			localStorage.setItem('kullaniciKodu',data.kullaniciKodu)
+			localStorage.setItem('userCode',data.kullaniciKodu)
+			$('#userCodeSpace').html(data.kullaniciKodu)
+			$('#tPuan').html(data.puantaj)
+		return false;
+		}else{
+			if($('#loginDurumSpace').html()==""){
+				$('#loginDurumSpace').html('Lütfen bekleyiniz..')
+			}
+		}
+});
+});
+
+setTimeout(function(){
+if($('#loginDurumSpace').html()=='Kullanıcı başarıyla doğrulandı. Lütfen bekleyiniz..'){
+localStorage.setItem('kullaniciAdi',kullanici)
+kayitliUyeGirisi();
+}else{
+alert("Hatalı giriş yapıldı! Lütfen tekrar giriş yapınız.")
+}
+},3500)
+
+}
+}
+
+
+
+function oturumKapat(){
+var olay = confirm("Oturumunuz kapatılacak?")
+if(olay==true){
+allLocalStoragesDelete()
+alert("Oturumunuz başarıyla kapatılmıştır.")
+window.location.reload(false)
+}
+}
+
+
+function yeniOzellikler(){
+$('#kullaniciSayfasi').hide()
+$('#yeniOzelliklerSayfasi').show()
+}
+
+
+function puanaCevir(){
+	$('#puanaCevirmeFormu').show()
+	$('#topPu').html($('#toplamPuan').html())
+	$('#topJe').html($('#tasPuan').html())
+}
+
+
+function puanaCevirGizle(){
+	$('#puanaCevirmeFormu').hide()
+}
+
+function puanAl(){
+var puanDegeri = 500
+var jeton = $('#tasPuan').html()
+var puan = Number($('#toplamPuan').html())
+var kullaniciKodu = localStorage.getItem('userCode')
+
+	if(jeton>=puanDegeri){
+		var query=firebase.database().ref('kullanicilar/'+kullaniciKodu)
+		query.update({
+			tasPuan: jeton-puanDegeri
+		});
+		query.update({
+			toplamPuan: puan+1
+		});
+		
+		  $('#topPu').html(Number($('#topPu').html())+1)
+		
+			var count = setInterval(function(){
+				$('#topJe').html(Number($('#topJe').html())-1)
+			},4)
+			
+			setTimeout(function(){
+				clearInterval(count)
+			},2000)
+		
+	}else{
+		alert("Maalesef yeterli jetonun yok!")
+	}
+}
+
+
+
+</script>
+
+<div style="margin-top:15px">	 
+<div class="container"  id="oyunSayfasi" style="display:none">
+	<div   id="header" onClick="" >
+		<div class="row" style="border-bottom:4px solid black">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onclick= "question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container"  id="body" style="border:0px solid white;background:white;">
+		<div class="row">
+			
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+				<div  id="rw" class="row cw">
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+					<div class="col-xs-1 rowStyle" onClick="burn(this)"><div  class="determiner"></div><span class="ballSpan"></span><span class="bsDate"></span></div>
+				</div>
+			
+		</div>
+	</div>
+	<div   id="footer">
+		<div class="row">
+			<div class="col-xs-12 footerStyle">
+				<div class="row">
+					<div class="col-xs-4 leftOptionStyle">
+						<div class="row" style="border:1px solid black;height:31px">
+								<b><p id= "kulid" class="optionsDownStyle"></p></b>
+						</div>
+						<div class="row" style="border:1px solid black;height:31px">
+						<p class="optionsDownStyle">Puan: <span id= "rakipPuan">0</span></p>
+						</div>
+						<div class="row" style="border:1px solid black;height:31px">
+						<p class="optionsDownStyle">Sıralama:
+								<span  id="opponentRanking"></span>
+						</p>
+						</div>
+					</div>
+					<div class="col-xs-4 okStyle">
+							<button type="button" style= "background:black;color:white;display:none" class="btn okBtn" id="buttonBlack" onclick= "yerlestirSiyah()">Onayla</button>
+							<button type="button" style= "background:orange;color:black;display:none" class="btn okBtn"  id="buttonWhite" onclick= "yerlestirBeyaz()">Onayla</button>
+							<button type="button" style= "width:30vw;display:none" class="btn btn-success"  id="buttonNewGame" onclick= "newGame2()">Yeniden Oyna</button>
+					</div>
+					<div class="col-xs-4 rightOptionStyle">
+						<div class="row" style="border:1px solid black;height:31px">
+						<b><p  id="rakid" class="optionsDownStyle"></p></b>
+						</div>
+						<div class="row" style="border:1px solid black;height:31px">
+						<p class="optionsDownStyle">Puan:<span id= "benPuan">0</span></p>
+						</div>
+						<div class="row" style="border:1px solid black;height:31px">
+						<p class="optionsDownStyle">Sıralama:
+								<span  id="myRanking"></span>
+						</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<span  id="keySpace" style="display:none"></span>
+	<span  id="nameSpace" style="display:none"></span>
+	<span  id="gameOwnerSpace" style="display:none"></span>
+	<span  id="gameOpponentSpace" style="display:none"></span>
+	<span  id="gameOverSpace" style="display:none"></span>
+	<span  id="winner" style="display:none"></span>
+	<span  id="state" style="display:none"></span>
+	<span  id="turn" style="display:none"></span>
+	<span  id="opponentCodeSpace" style="display:none"></span>
+
+
+	
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container"  id="yardimSayfasi" style="display:none">
+	<div class=""  id="header" onClick="">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()" style= "color:gray"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12" style="height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3>Gambit Nedir?</h3>
+			<h4>Gambit orijinal adı 'Gomoku' olan anonim bir oyunun mobil versiyodur. İsmini bir satranç stratejisinden alır.</h4>
+			<h3>Gambit Nasıl Oynanır?</h3>
+			<h4>Masa üzerinde 12x12'lik toplam 144 taş haznesi bulunur. Bu haznelerden bir tanesine dokunduğnuzda sarı ışık yanar. Taşınızı bu noktaya koymak için 'Onayla' butonuna basmalısınız. Eğer bir başka noktaya koymak istiyorsanız seçiminiz sarı renkteyken bunu yapmalısınız. 
+			Oyun mantığında eğer taş renginiz siyah ise yatay olarak, dikey olarak veya çarpraz olarak 5 siyah taşı yan yana getirmelisiniz. Eğer taş renginiz turuncu ise aynı uygulamayı turuncu taşlar üzerinde yapmalısınız. Kolay gelsin.
+			</h4>
+			</div>
+		</div>
+	</div>
+</div>	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+<div class="container"  id="gelenSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()" style= "color:gray"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="">
+		<div class="row">
+			<div class="col-xs-12" id="gelenSayfasiBody" style="overflow-y:auto;height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3>Gelen İstekler</h3>
+			<h3><span id="bildirimDurumu"></span></h3>
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+
+
+
+<div class="container"  id="siralamaSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()" style= "color:gray"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12"  id="siralamaSayfasiBody" style="overflow-y:auto;height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3>Genel Sıralama</h3>
+			
+			
+			</div>
+		</div>
+	</div>
+</div>	
+	
+
+
+
+
+
+
+
+
+<div class="container"  id="gidenSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()" style= "color:gray"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12 vcenter" style="height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			
+			<div class="jumbotron">
+			<h4>Arkadaşlarınıza oynayabilmek için kullanıcı adını girip oyun isteği gönderebilirsiniz.</h4>
+			<br>
+			<form class="form-inline">
+    <div class="input-group">
+    <span class="input-group-text" id="kullanici_adi"></span> 
+      <input type="text" maxlength= "10" style="border-radius:5px 0px 0px 5px" id="rakipKadi" class="form-control" size="25" placeholder="Kullanıcı Adı" required>
+      <div class="input-group-btn">  
+        <button type="button" onclick= "istekGonder()" id= "gonderButonu" class="btn btn-success">Gönder</button>    
+      </div>
+    </div>
+   </form>
+			</div>
+			
+						
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+
+<div class="container"  id="kullaniciSayfasi" style="display:none;position:absolute">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()" style= "color:gray"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+	
+	<div class="row">
+			<div class="col-xs-4" style="height:151px;background:white;border-color:black;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px">
+					<div  class="row">
+						  		<i class="fas fa-user-circle profilevcenter"></i>
+					</div>
+			</div>
+			<div class="col-xs-8 pcenter" style="height:25px;background:white;border-color:black;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px"><i class="fas fa-star-half-alt"></i><b style="margin-left:5px;margin-top:1px">Puan:<span  id="toplamPuan">0</span></b>
+			</div>
+			<div class="col-xs-8 pcenter" style="height:25px;background:white;border-color:darkgray;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px"><i class="fas fa-clipboard-check"></i><b style="margin-left:8px;margin-top:1px">Kazanılan Oyun:<span  id="tPuan">0</span></b>
+			</div>
+			<div class="col-xs-8 pcenter" style="height:25px;background:white;border-color:darkgray;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px"><i class="fas fa-list-ol"></i><b style="margin-left:4px;margin-top:1px">Sıralama:<span id="rankingSpace"></span></b>
+			</div>
+			<div class="col-xs-8 pcenter" style="height:25px;background:white;border-color:darkgray;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px"><i class="fas fa-calendar-times"></i><b style="margin-left:5px;margin-top:1px">Biten Oyun:<span id="bitenOyunSpace"></span></b>
+			</div>
+			<div class="col-xs-8 pcenter" style="height:25px;background:white;border-color:darkgray;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px"><i class="fas fa-percent"></i><b style="margin-left:5px;margin-top:1px">Başarı Yüzdesi:<span  id="byuzde2"></span></b>
+			</div>
+			<div class="col-xs-8 pcenter" style="height:25px;background:white;border-color:darkgray;border-style:solid;border-width:2px 0px 0px 0px;border-radius:0px 0px 5px 5px"><i class="fas fa-coins"></i><b style="margin-left:3px;margin-top:1px">Jeton:<span  id="tasPuan"></span></b>
+			</div>
+	</div>
+	
+	<div class="row">
+			<b><div class="col-xs-12" style="font-size:14px;border-left:8px solid blue;border-top:2px solid black;background:skyblue;height:40px;display:flex;
+align-items:center;"  id="kSpanAdi">kullanici_adi
+			</div></b>
+	</div>
+	
+		<div class="row">
+			<div class="col-xs-12" style="height:306px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+		<br>
+			
+ <dl>
+ <dd onClick="puanaCevir()"><a style= "font-size:15px">- Jetonlarını Puana Çevir</a></dd>
+  <dd onClick="gidenİstek()"><a style= "font-size:15px">- Gönderilen İstekler</a></dd>
+  <dd onClick="oyunSilmeİstek()"><a style= "font-size:15px">- Oyun Silme İstekleri</a></dd>
+  <dd onClick="yeniOzellikler()"><a style= "font-size:15px">- Yeni Gelen Özellikler</a></dd>
+  <dd onClick="detayliYardim()"><a style= "font-size:15px">- Detaylı Yardım</a></dd>
+ </dl>      
+			
+		
+			<h4 style="display:none">Kullanıcı Kodu: <span  id="userCodeSpace"></span></h4>
+			
+			<div class="progress">
+    <div id= "byuzdeStyle" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"><span id= "byuzde">    
+      </span>
+    </div>
+  </div>
+  
+			<button style="float:right" class="btn btn-danger" onClick="oturumKapat()">Oturumu Kapat</button>
+			<h4 style="display:none">Bildirim Sayısı: <span id="bildirimSayisi"></span></h4>
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+<div class="container"  id="profilSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12" style="height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3 style="border-left:8px solid;border-color:#43A047;background:#81C784;height:60px;display:flex;
+align-items:center;"  id="profilSpanAdi"></h3>
+			<span style="display:none" id="userCodeSpace"></span>
+			<h4>Puan: <span  id="profilToplamPuan">0</span></h4>
+			<h4>Kazanılan Oyun: <span  id="profilPuan">0</span></h4>
+			<h4>Sıralama: <span id="profilRankingSpace"></span></h4>
+			<h4>Biten Oyun: <span id="profilBitenOyunSpace"></span></h4>
+			<h4>Jeton: <span id="profilJetonSpace">0</span></h4>
+			<h4>Başarı Yüzdesi: </h4>
+			<div class="progress">
+    <div id= "byuzdeStyleProfil" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"><span id= "byuzdeProfil">
+      
+      </span>
+    </div>
+  </div>
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+
+
+<div class="container"  id="gidenİstekSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="">
+		<div class="row">
+			<div class="col-xs-12" id="gidenİstekSayfasiBody" style="overflow-y:auto;height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3>Giden İstekler</h3>
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+<div class="container"  id="istekİptalSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="">
+		<div class="row">
+			<div class="col-xs-12" id="istekİptalSayfasiBody" style="overflow-y:auto;height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3>Oyun Silme İstekleri</h3>
+			
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+
+
+<div class="container"  id="girisSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12" style="height:450px;border:2px solid black;border-radius:5px 5px 0px 0px;">
+				<div class="row logoStyle" style="height:450px;background:black">
+				 		<p><b> G A M B I T </b></p>		<br>	
+				</div>		
+			</div>
+		</div>
+		
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12 vcenter" style="height:197px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			
+  <form class="form-inline">
+    <div class="input-group">
+    <span class="input-group-text" id="kullanici_adi"></span> 
+      <input type="text" onclick= "eraseState()" maxlength= "10" id="" style= "border-radius:5px 0px 0px 5px" class="form-control" size="25" placeholder="Kullanıcı adı oluşturun.." autofocus required>
+      <div class="input-group-btn">  
+        <button type="button" onclick= "girisControl()" id= "girisYapButonu" class="btn btn-success">Giriş Yap</button>    
+      </div>
+    </div>
+    	
+   </form>
+   <br>
+ </div>			
+			</div>
+		</div>
+</div>	
+
+
+
+
+
+
+
+
+<div class="container"  id="gamesSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" onclick= "control1()" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" id= "plusC" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12"  id="gamesSayfasiBody" style="overflow-y:auto;height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			<h3>Oyunlar</h3>
+			
+			
+			</div>
+		</div>
+	</div>
+	<p id= "userCodeGeneral"></p>
+</div>	
+
+
+
+
+
+<div class="container"  id="loginSayfasi" style="display:none">
+	
+   		<div style="height:647px;background:#1a237e" class="jumbotron text-center">  		
+   			<div style="height:445px;background:white;margin-top:70px" class="jumbotron text-center">
+   			
+   		<h1>
+   		Merhaba!
+   		<p>Gambit'e Hoşgeldiniz.</p>
+   		</h1><br><br>
+   		
+   		<form class="form-inline">
+    <div class="input-group">      
+       <div class="input-group-text" style="float:left">  
+        <i style="font-size:20px" class="fas fa-user"></i>    
+      </div> 
+    <span class="input-group-text" id="kullanici_adi"></span> 
+      <input type="text" maxlength= "10" id="kadiGiris" style= "border-radius:5px" class="form-control" size="31" placeholder="Kullanıcı Adı" autofocus required>
+   
+    </div>
+    
+   </form>
+   
+   <br>
+   
+   <form class="form-inline">
+    <div class="input-group">
+    <div class="input-group-text" style="float:left">  
+        <i style="font-size:20px" class="fas fa-lock"></i>    
+      </div> 
+    <span class="input-group-text" id="parola_num"></span> 
+      <input type="password" maxlength= "16" id="parolaGiris" style= "border-radius:5px 0px 0px 5px" class="form-control" size="25" placeholder="Parola" required>
+      <div class="input-group-btn">  
+        <button type="button" style= "margin-top:23px" onclick= "login()" id= "girisYapButonu" class="btn btn-success">Giriş Yap</button>    
+      </div> 
+    </div><br>
+    	
+   </form><br><br>
+   
+   			<button type="button" onClick="kayitSayfasi()" class="btn btn-primary btn-block">Yeni Kayıt Oluştur!</button>
+   		</div> 		
+   		<h4><span style="color:white" id="loginDurumSpace"></span></h4>
+   </div>
+      
+</div>	
+
+
+
+
+
+
+
+
+<div class="container"  id="registerSayfasi" style="display:none">
+	
+   		<div style="height:647px;background:#4527a0" class="jumbotron text-center">
+   			<div style="height:445px;background:white;margin-top:70px" class="jumbotron text-center">
+   			<i onClick="loginSayfasi()" style="float:right;font-size:22px;margin-top:-12px" class="far fa-times-circle"></i>
+   		<h1>
+   		G A M B I T
+   		<p>Kaydınızı Oluşturun</p>
+   		</h1><br><br>
+   		
+   		<form class="form-inline">
+    <div class="input-group">      
+       <div class="input-group-text" style="float:left">  
+        <i style="font-size:20px" class="fas fa-user"></i>    
+      </div> 
+    <span class="input-group-text" id="kullanici_adi"></span> 
+      <input type="text" maxlength= "10" id="kadi" style= "border-radius:5px" class="form-control" size="31" placeholder="Kullanıcı Adı Oluşturun" autofocus required>
+   
+    </div>
+    	
+   </form>
+   
+   <br>
+   
+   <form class="form-inline">
+    <div class="input-group">
+    <div class="input-group-text" style="float:left">  
+        <i style="font-size:20px" class="fas fa-lock"></i>    
+      </div> 
+    <span class="input-group-text" id="parola_num"></span> 
+      <input type="password" maxlength= "16" id="parolaKayit" style= "border-radius:5px" class="form-control" size="31" placeholder="Parola Oluşturun" required>
+      
+    </div>
+   </form><br><br><br>
+   
+   			<button type="button" class="btn btn-success btn-block" onclick= "girisControl()">Kaydol!</button>
+   		</div> 	
+   		<h4><span style="color:white" id="girisDurumSpace"></span></h4>	
+   </div>
+      
+</div>	
+
+
+
+
+
+
+
+
+
+
+<div class="container"  id="messagesSayfasi" style="display:none">
+	<div class=""  id="header">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" id= "plusC" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>				
+			</div>
+		</div>
+	</div>
+	
+			<div class="row" style="border-style:solid;border-color:black;border-width:4px 2px 50px 2px;height:54px;background:green">
+				<div class="col-xs-10 altHeaderStyle optionsUpMjStyle" style="background:#ab47bc">
+				<b><span id= "messagesOpponentName">@Kullanici_adi</span>
+				<span style="display:none" id= "sohbetKodu"></span>
+				</div></b>
+				
+				<div style="background:#eeeeee;border-style:solid;border-color:white;border-width:0px 2px 0px 0px" class="col-xs-2 altHeaderStyle optionsUpStyle">
+				<i id= "trash" class="fas fa-trash-alt" onclick= "trashMode()" style="font-size:18px;color:gray;"></i>
+				</div>
+			</div>
+			
+			<div class=""  id="ara">
+		<div class="row">
+			<div class="col-xs-12"  id="aralik" style="border-style:solid;border-color:black;border-width:0px 2px 0px 2px;height:10px;background:white;border-radius:0px;margin-top:0px">
+			</div>
+		</div>
+	</div>
+			
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12"  id="messagesSayfasiBody" style="overflow-y:auto;height:325px;background:white;border-style:solid;border-color:black;border-width:0px 2px 0px 2px;border-radius:0px;margin-top:0px">
+			<h3 style="margin-top:10px"></h3>			
+			</div>
+		</div>
+	</div>
+	
+	
+	<div class="row" style="border-style:solid;border-color:black;border-width:0px 2px 0px 2px;height:54px;background:white;">
+				<div class="col-xs-12 altHeaderStyle optionsUpStyle" style="background:white">
+						<input type="text" style= "margin-top:18px;border-radius:10px" class="form-control" id="mesaj" placeholder="Mesaj yaziniz.." />
+				</div>			
+			</div>			
+			<div class="row" style="border-style:solid;border-color:black;border-width:0px 2px 2px 2px;border-radius:0px 0px 5px 5px;height:54px;background:white;">
+				<div class="col-xs-8 altHeaderStyle optionsUpStyle" style="background:white">
+				</div>			
+				<div class="col-xs-4 altHeaderStyle optionsUpStyle" style="background:white">
+						<button type="button" style="margin-top:0px;border-radius:0px 12px 0px 12px" onclick="mesajGonder();" class="form-control btn btn-success">Gönder</button> 
+				</div>			
+			</div>
+	
+	
+</div>	
+
+
+
+
+
+<div class="container"  id="yeniOzelliklerSayfasi" style="display:none">
+	<div class=""  id="header" onClick="">
+		<div class="row">
+			<div class="col-xs-12 headerStyle">
+				<div class="row logoStyle" style="height:100px;background:black">
+				 		<p><b> G A M B I T </b></p>
+				</div>
+				<div class="row" style="height:50px;background:green">
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-arrow-circle-left" onClick="back()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-question-circle" onClick="question()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-bolt" onClick="bolt()"></i><span id= "badgeİstek" class="badge" style="display:none" onClick="bolt()">0</span></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-medal" onClick="medal()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-plus-circle" onClick="plus()"></i></div>
+					<div class="col-xs-2 altHeaderStyle optionsUpStyle"><i class="fas fa-user-circle" onClick="user()"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class=""  id="body">
+		<div class="row">
+			<div class="col-xs-12" style="overflow-y:auto;height:497px;background:white;border:2px solid black;border-radius:0px 0px 5px 5px">
+			
+						
+						
+						<div style="background:#fff176;" class="jumbotron text-center newsStyle">
+							<h3>
+							Jeton Kazan!
+							</h3>
+							<p>
+							Jeton özelliği ile rakiplerini ne kadar az hamlede yenilgiye uğratırsan o kadar çok jeton kazanıyorsun. Jetonlarını puana dönüştür sende sıralamanı yükselt!
+							</p>
+					</div>
+				   
+				   
+				   <div style="background:#ef5350;" class="jumbotron text-center newsStyle">
+							<h3>
+							Sohbete Gel!
+							</h3>
+							<p>
+							Artık mesajlaşma özelliği ile oyundan çıkıp başka ortamlarda haberleşmenize gerek kalmadı. Üstelik oyuna özel mesajlaşma özelliği sayesinde mesajlarınız daha güvende!
+							</p>
+					</div>
+					
+					
+					<div style="background:#76ff03;" class="jumbotron text-center newsStyle">
+							<h3>
+							Rakibinin Genel Durumunu Gör!
+							</h3>
+							<p>
+							 Oyunlar Sayfası'nda; puanını, kazandığı oyunları, başarı yüzdesini ve kısacası ona dair tüm genel durumu görmek için ismin üzerine çift tıklatın.
+							</p>
+					</div>
+					
+					
+					<div style="background:#daa520;" class="jumbotron text-center newsStyle">
+							<h3>
+							Kolayca İstek Gönder
+							</h3>
+							<p>
+							 Genel Sıralama Sayfası'na gidin ve sıralama üzerinden istediğiniz kullanıcıya kolayca istek gönderin! Rakibinizin ismini yazmak için zamanınızı harcamayın.
+							</p>
+					</div>
+				   
+				   
+				   <div style="background:#4db6ac;" class="jumbotron text-center newsStyle">
+							<h3>
+							Amansızca Yarışalım!
+							</h3>
+							<p>
+							Yeni gelen 'Genel Sıralama' özelliği ile birincilik için oynayın. Tüm kullanıcılar başarınızı görsün! 
+							</p>
+					</div>
+				   
+				   
+				   <div style="background:#ff4081;" class="jumbotron text-center newsStyle">
+							<h3>
+							Artık Gambit Online!
+							</h3>
+							<p>
+							Artık arkadaşlarınızla sadece kullanıcı adını yazarak istek gönderebilecek ve online olarak oynayabileceksiniz. Keyifli oyunlar!
+							</p>
+					</div>
+				   
+				  
+				   <div style="background:#9575cd;" class="jumbotron text-center newsStyle">
+							<h3>
+							İlk Zamanlar
+							</h3>
+							<p>
+							Gambit'te şu an sadece taşları koyabiliyoruz. Taş renklerimiz mavi ve kırmızı. Ve tıkladıkça sırayı otomatik olarak veren ortada tek bir buton var. Size Gambit zevkini sanki tahtayı yere çizmişsiniz gibi bir haz yaşatıyor..
+							</p>
+					</div>
+			
+					<div style="background:skyblue;" class="jumbotron text-center newsStyle">
+							<h3>Merhaba Gambit</h3>
+							<p>Gambit Şubat 2021'de Gomoku oyun pratiği için bireysel olarak düşünüldü.</p>
+					</div>
+			
+			
+			</div>
+		</div>
+	</div>
+</div>	
+
+
+
+
+
+
+
+	
+	
+</div>
+<p style= "display:none"  id="sheet"></p>
+</div>
+
+
+
+
+<div class="container"  id="logoSayfasi" style="display:block">
+   		<div style="height:647px;background:#263238" class="jumbotron text-center">   			
+   			<div  id="logo" class="logo"><img style="margin-top:120px;width:330px;height:350px;border-radius:10px" src= "https://i.imgur.com/2WAoE74.png"></div>   		
+   </div>      
+</div>	
+
+
+
+
+
+
+<div  class="container puanaCevirStyle" id="puanaCevirmeFormu" style="">
+<div style="height:530px;background:#ffd54f;margin-top:0px" class="jumbotron text-center"> 
+<i onClick="puanaCevirGizle()" style="float:right;font-size:22px;margin-top:-12px" class="far fa-times-circle"></i>			
+   		<h1>
+   		Jetonlarını Puana Çevir
+   		<p>500 jetona 1 puan satın al</p>
+   		<p>Rakibini en az hamlede yen, daha fazla jeton kazan!</p>
+   		</h1><br><br>		
+ <form class="form-inline" style="color:black">
+    <div class="input-group">            
+      <h3 style="float:left">Toplam Puanın:<h3  id="topPu"></h3></h3>
+      <h3 style="float:left">Toplam Jetonun:<h3  id="topJe"></h3></h3>   
+    </div>    
+ </form><br>
+   
+   			<button type="button" onClick="puanAl()" class="btn btn-primary btn-block">Puan Al!</button>
+   		</div> 		
+
+</div>
+	
+	 </body>
+	 
+<script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-database.js"></script>
+	 
+	 <script>
+  var firebaseConfig = {
+    apiKey: "AIzaSyCKIzV-q_52m-pVRiiq_7hhJk3CZsCo0Qw",
+    authDomain: "gambit-55203.firebaseapp.com",
+    databaseURL: "https://gambit-55203-default-rtdb.firebaseio.com",
+    projectId: "gambit-55203",
+    storageBucket: "gambit-55203.appspot.com",
+    messagingSenderId: "1085218562818",
+    appId: "1:1085218562818:web:f7331489d95ee12100581b",
+    measurementId: "G-J8K8LFCTK4"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+	 
+ </html>
